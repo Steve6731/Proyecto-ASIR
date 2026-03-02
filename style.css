@@ -1,0 +1,35 @@
+* {
+   margin: 0;
+   padding: 0;
+   background-color: #fff;
+}
+
+body {
+
+}
+
+#workArea {
+   height: 100vh;
+   background:rgb(41, 41, 41);
+}
+
+#leftClickMenu{
+   display: none;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+}
+
+#leftClickMenu ul{
+   list-style: none;
+   padding: 5px;
+   margin: 0;
+}
+
+#leftClickMenu li {
+   padding: 1px;
+}
+
+#leftClickMenu li:hover {
+   background-color: #0084ff;
+   border-radius: 4px;
+}
