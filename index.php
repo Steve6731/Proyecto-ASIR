@@ -8,18 +8,18 @@
 </head>
 <body>
    
-   <div id="workArea">  </div>
-
-    <div id="leftClickMenu" class="custom-menu">
-        <ul>
-            <li onclick="handleMenuClick('add')">Add</li>
-            <li onclick="handleMenuClick('del')">Delete</li>
-            <hr>
-            <li onclick="handleMenuClick('property')">property</li>
-        </ul>
-    </div>
-   <script src="./js/config.js"></script>
-   <script src="./js/function.js"></script>
+   <div id="workArea"> </div>
+   
+   <div id="leftClickMenu" class="custom-menu">
+      <ul>
+         <li onclick="leftClickMenuAcction('add')">Add</li>
+         <li onclick="leftClickMenuAcction('del')">Delete</li>
+         <hr>
+         <li onclick="leftClickMenuAcction('conf')">property</li>
+      </ul>
+   </div>
+   <script src="./js/accionesDeMenu.js"></script>
+   <script src="./js/selectElement.js"></script>
    <script src="./js/leftClickMenu.js"></script>
 
 </body>

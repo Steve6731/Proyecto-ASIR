@@ -1,23 +1,16 @@
+// ---------------------------- MUESTRA MENU -------------------------------
 const workArea = document.getElementById("workArea");
 const menu = document.getElementById("leftClickMenu");
 
-workArea.addEventListener('contextmenu',function(event){
-   event.preventDefault();
-
-   const x = event.clientX;
-   const y = event.clientY;
+workArea.addEventListener('contextmenu',function(e){
+   e.preventDefault();
 
    menu.style.display = 'block';
    menu.style.position = "fixed";
-   menu.style.left = x + 'px';
-   menu.style.top = y + 'px';
+   menu.style.left = e.clientX + 'px';
+   menu.style.top = e.clientY + 'px';
 
 })
 
-document.addEventListener('click', function() {
-   menu.style.display = 'none';
-});
-
-menu.addEventListener('click', function(event) {
-   event.stopPropagation(); // limita evento dentro de elemento "menu"
-});
+document.addEventListener('click', function(){menu.style.display = 'none';});
+menu.addEventListener('click', function(e){e.stopPropagation()});
