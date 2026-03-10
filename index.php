@@ -15,9 +15,13 @@
          <li onclick="leftClickMenuAcction('add')">Add</li>
          <li onclick="leftClickMenuAcction('del')">Delete</li>
          <hr>
-         <li onclick="leftClickMenuAcction('conf')">property</li>
+         <li onclick="leftClickMenuAcction('conf')">Property</li>
+         <hr>
+         <li onclick="exportWorkArea()">Exportar</li>
       </ul>
    </div>
+   
+   <script src="./js/exportaWorkArea.js"></script>
    <script src="./js/accionesDeMenu.js"></script>
    <script src="./js/selectElement.js"></script>
    <script src="./js/leftClickMenu.js"></script>
