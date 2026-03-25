@@ -1,21 +1,5 @@
 // ------------------------ ACCTIONES DE MENU -----------------------------
-function leftClickMenuAcction(mode){
-   switch(mode){
-      case 'add':
-         addElement();
-         break;
-      case 'del':
-         delElement();
-         break;
-      case 'conf':
-         confElement();
-         break;
-      default:
-         console.log(`Mode "${mode}" is not supported for handMenuClick()`);
-         break;
-   }
-   menu.style.display = 'none';
-}
+
 
 function addElement() {
    const element = document.createElement('div');

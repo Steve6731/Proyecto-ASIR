@@ -1,30 +1,31 @@
 
 
-/* ===== 侧边栏 ===== */
+/* ------ sidebar ------ */
 .sidebar {
    width: 260px;
    background: linear-gradient(145deg, #1e2b3c, #15232e);
    color: #e0edf5;
    display: flex;
    flex-direction: column;
-   transition: transform 0.3s ease-in-out;  /* 平滑滑动效果 */
+   transition: transform 0.3s ease-in-out;  /* animacion */
    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
-   /* 固定高度由父容器控制，高度自适应 */
+
    height: auto;
-   min-height: 100vh;            /* 保证侧边栏撑满视口高度 */
-   position: fixed;              /* 当内容滚动时侧边栏保持可见 (在桌面视图) */
+   min-height: 100vh;
+
+   position: fixed;
    top: 0;
    left: 0;
    z-index: 10;
 }
 
-/* 侧边栏隐藏状态：利用translateX完全移出可视区 (保留一点阴影过渡更自然) */
 .sidebar.hidden {
    transform: translateX(-100%);
    transition: transform 0.25s ease-in-out;
 }
 
-/* 侧边栏头部 */
+
+/* sidebar header */
 .sidebar-header {
    padding: 24px 20px;
    border-bottom: 1px solid #2c4053;
@@ -40,7 +41,8 @@
    color: #2d4055;
 }
 
-/* 导航菜单 */
+
+/* nav */
 .nav-menu {
    flex: 1;
    padding: 20px 0;
@@ -72,7 +74,8 @@
    text-align: center;
 }
 
-/* 底部信息 */
+
+/* sidebar footer */
 .sidebar-footer {
    padding: 18px 24px 24px;
    border-top: 1px solid #253b48;
@@ -80,6 +83,8 @@
    color: #8fa7bc;
 }
 
+
+/* botton */
 .menu-toggle {
    background: #FFF;
    border: none;
@@ -96,9 +101,9 @@
    box-shadow: 0 6px 12px rgba(0,20,40,0.15);
    transition: background 0.2s, transform 0.1s;
 
-   /* 添加透明度过渡效果 */
-   opacity: 0;  /* 完全透明 */
-   transition: opacity 0.3s ease, background 0.2s, transform 0.1s;  /* 增加透明度过渡 */
+   /* animacion */
+   opacity: 0;  
+   transition: opacity 0.3s ease, background 0.2s, transform 0.1s;
   
    position: absolute;
    top: 50%;
@@ -108,15 +113,10 @@
 }
 
 .menu-toggle:hover {
-   opacity: 1;  /* 完全不透明 */
-   transition: opacity 0.5s ease;  /* 较慢的透明度过渡 */
+   opacity: 1;
+   transition: opacity 0.5s ease;
 }
 
 .menu-toggle:active {
    transform: scale(0.96);
-}
-
-/* 辅助文字/图标 (模拟icon) */
-.material-symbols-outlined {
-   font-family: 'Segoe UI', 'Arial', sans-serif;
 }
