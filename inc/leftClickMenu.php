@@ -4,6 +4,6 @@
       <hr>
       <li onclick="">Property</li>
       <hr>
-      <li onclick="exportWorkArea()">Exportar</li>
+      <li onclick="exportIframeContent(iframe)">Exportar</li>
    </ul>
 </div>
