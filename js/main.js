@@ -1,7 +1,52 @@
 let dragSourceNode = null;
 const iframe = document.getElementById('myIframe');
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+let DOMTree = $("#myIframe body")
+//let $iframeBody = $(iframeDoc.body);
+//------------------------DOMTree---------------------------------------
+function buildDOMTree(element, maxDepth = Infinity, currentDepth = 0) {
 
+    if (currentDepth >= maxDepth) return null;
+    if (element.nodeType !== 1) return null;
+    
+    //get
+    let $element = $(element);
+    let treeNode = {
+        tag: element.tagName.toLowerCase(),
+        id: element.id || null,
+        class: element.className || null,
+        depth: currentDepth,
+        DOMelement: element,
+        children: []
+    };
+    
+    //execute
+    $element.children().each(function() {
+        var childNode = buildDOMTree(this, maxDepth, currentDepth + 1);
+        if (childNode) {
+            treeNode.children.push(childNode);
+        }
+    });
+    
+    return treeNode;
+}
+
+function showDOMTree(node, indent = 0) {
+    if (!node) return;
+    
+    let indentStr = '  '.repeat(indent);
+    let output = indentStr + node.tag;
+    
+    if (node.id) output += '#' + node.id;
+    if (node.class) output += '.' + node.class;
+    
+    console.log(output);
+    
+    // 递归处理子节点，增加缩进
+    for (let child of node.children) {
+        showDOMTree(child, indent + 1);
+    }
+}
 //-----------------------addElement------------------------------------
 function addDiv(text){
    newDiv = iframeDoc.createElement('div');
@@ -10,6 +55,9 @@ function addDiv(text){
    iframeDoc.body.appendChild(newDiv);
    addStaticElementDraggable(newDiv);
    // move element
+   DOMTree = buildDOMTree(iframeDoc.body);
+   console.log(DOMTree);
+   showDOMTree(DOMTree);
 }
 
 function addStaticElementDraggable(element){
@@ -62,6 +110,7 @@ function toggleSidebar() {
    } else {
          sidebar.classList.add('hidden');
    }
+   console.log("sidebar change mode");
 }
 
 toggleBtn.addEventListener('click', function(e) {

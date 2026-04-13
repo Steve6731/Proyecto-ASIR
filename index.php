@@ -29,7 +29,14 @@
 <body>
 
    <iframe id="myIframe" src="about:blank"
-   srcdoc=" <style id=templateCSS> * {user-select: none;}</style> ">
+   srcdoc="
+   <head>
+      <style id=templateCSS> * {user-select: none;}</style>
+      <meta charset='UTF-8'>
+      <title>MyFirstWeb</title>
+   </head>
+   <body><p>something</p></body>
+   ">
    </iframe>
 
    <?php //include("inc/jqueryUIsample.php")?>
