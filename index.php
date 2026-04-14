@@ -44,7 +44,9 @@
    <?php include("inc/sidebar.php")?>
    <div id="editArea">
    <textarea id="myEditor" sytle=" position:fixed; top:100vh;">
-   // escribir algo
+   // Esto es solo un ejemplo para probar cómo funciona CodeMirror, 
+   // por favor, no le den importancia.
+
    function greet(name) {
       console.log("Hello, " + name);
    }
