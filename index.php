@@ -6,24 +6,14 @@
 
    <!-- codemirror Corelib -->
    <script src="codeMirror/lib/codemirror.js"></script>
-   <!-- JavaScript -->
+   <!-- JavaScript for codeMirror-->
    <script src="codeMirror/mode/javascript/javascript.js"></script>
 
    <script src="./js/lib/jquery/jquery.js"></script>
-   <script src="./js/lib/jqueryUI/jquery-ui.js"></script>
-   <script src="./js/lib/jqueryUI/jquery-ui.min.js"></script>
-
+   
    <link rel="stylesheet" href="codeMirror/lib/codemirror.css">
    <link rel="stylesheet" href="codeMirror/theme/monokai.css">
-
-   <?php
-      $css_dir = 'css/';
-      $css_files = glob($css_dir . '*.css');
-
-      foreach($css_files as $css) {
-         echo '<link rel="stylesheet" href="' . $css . '">' . "\n";
-      }
-   ?>
+   <link rel="stylesheet" href="css/main.css">
 
 </head>
 <body>
@@ -39,9 +29,6 @@
    ">
    </iframe>
 
-   <?php //include("inc/jqueryUIsample.php")?>
-   <?php include("inc/leftClickMenu.php")?>
-   <?php include("inc/sidebar.php")?>
    <div id="editArea">
    <textarea id="myEditor" sytle=" position:fixed; top:100vh;">
    // Esto es solo un ejemplo para probar cómo funciona CodeMirror, 
@@ -60,6 +47,8 @@
          lineWrapping: true
       });
    </script>
+   <?php include("inc/leftClickMenu.php")?>
+   <?php include("inc/sidebar.php")?>
 
    <script src="./js/autoLoader.js"></script>
 </body>

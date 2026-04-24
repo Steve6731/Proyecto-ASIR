@@ -49,10 +49,30 @@ iframe{
    border-radius: 4px;
 }
 
-#sidebar {
-   width: 260px;
-   background: linear-gradient(145deg, #1e2b3c, #15232e);
+/*sidebar*/
+
+.hidden.Left {
+   transform: translateX(-100%);
+   transition: transform 0.25s ease-in-out;
+}
+
+.hidden.Right {
+   transform: translateX(320px);
+   transition: transform 0.25s ease-in-out;
+}
+
+#sidebarLeft {
+   left: 0;
+}
+
+#sidebarRight {
+   right: 0;
+}
+
+.sidebar {
+   width: 320px;
    color: #e0edf5;
+   background-color: white;
    display: flex;
    flex-direction: column;
    transition: transform 0.3s ease-in-out;  /* animacion */
@@ -63,39 +83,60 @@ iframe{
 
    position: fixed;
    top: 0;
-   left: 0;
    z-index: 10;
 }
 
-#sidebar.hidden {
-   transform: translateX(-100%);
+
+/*tabs*/
+
+.tabs {
+  background-color: white;
+  display: flex;
+  padding: 0; margin: 0;
+  min-width: 100%;
+}
+
+.tab{
    transition: transform 0.25s ease-in-out;
+   position:absolute;
+   top:40px;
 }
 
-
-/* sidebar header */
-#sidebar-header {
-   padding: 24px 20px;
-   border-bottom: 1px solid #2c4053;
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
+.tabs div {
+   min-width: 33%;
+   min-height: 40px;
 }
 
-#sidebar-header h2 {
-   font-weight: 500;
-   font-size: 1.5rem;
-   letter-spacing: 0.5px;
-   color: #8fa7bc;
+.tabs button {
+  height: 100%;
+  width: 100%;
+  border: none;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0 16px;
+  white-space: nowrap;
 }
 
-/* nav */
-#sidebar .nav-menu {
+.tabs button:hover {
+  color: #333;
+  background-color: #ffffff;
+}
+
+.tabs button:active {
+  background-color: #e0e0e0;
+}
+
+/* sidebar nav */
+#sidebarLeft .nav-menu {
    flex: 1;
    padding: 20px 0;
+   height: 75vh;
 }
 
-#sidebar .nav-item {
+#sidebarLeft .nav-item {
    display: flex;
    align-items: center;
    gap: 14px;
@@ -107,12 +148,12 @@ iframe{
    cursor: pointer;
 }
 
-#sidebar .nav-item:hover {
+#sidebarLeft .nav-item:hover {
    background: #2d4055;
    color: #cbdbe8;
 }
 
-#sidebar .nav-item i { 
+#sidebarLeft .nav-item i { 
    background: transparent;
    font-style: normal;
    font-weight: 400;
@@ -138,7 +179,6 @@ iframe{
    font-size: 1.8rem;
    width: 54px;
    height: 54px;
-   border-radius: 0 16px 16px 0;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -152,11 +192,19 @@ iframe{
   
    position: absolute;
    top: 50%;
-   left: 100%;
    z-index: 10;
    translate: -50 -50;
 }
 
+.menu-toggle.Left{
+   left: 100%;
+   border-radius: 0 16px 16px 0;
+}
+
+.menu-toggle.Right{
+   right: 100%;
+   border-radius: 16px 0 0 16px;
+}
 .menu-toggle:hover {
    opacity: 1;
    transition: opacity 0.5s ease;
