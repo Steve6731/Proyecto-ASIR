@@ -10,10 +10,12 @@ function addDiv(text){
    newDiv.innerHTML = "<p>"+text+"</p>";
    iframeDoc.body.appendChild(newDiv);
    
-   newDiv.draggable="true"
+   newDiv.draggable="true";
    newDiv.addEventListener('dragstart', handleDragStart); //用于拖拽该元素
    newDiv.addEventListener('dragover', handleDragOver); //当处于该元素上方时触发 用于高亮元素
    newDiv.addEventListener('drop', handleDrop); //用于放置拖拽元素到该元素
+   console.log("do addDiv");
+   buildDOMTree();
 }
 
 //----------------------- Drag Element action ----------------------------
@@ -76,3 +78,8 @@ function exportIframeContent(iframeElement, fileName = 'index.html') {
   
   URL.revokeObjectURL(url);
 }
+
+// ------------------ inicializacion -------------------
+$(document).ready(function(){
+      buildDOMTree();
+});

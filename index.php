@@ -25,7 +25,7 @@
       <meta charset='UTF-8'>
       <title>MyFirstWeb</title>
    </head>
-   <body><p>something</p></body>
+   <body></body>
    ">
    </iframe>
 
