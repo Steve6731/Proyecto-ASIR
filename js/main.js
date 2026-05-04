@@ -3,12 +3,12 @@ const iframe = document.getElementById('myIframe');
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let currentSelectElement;
+
 //-----------------------Current Selected Element----------------------
 
 function setAllElementFocusable(){
    let focusableElements = iframeDoc.body.querySelectorAll('*');
    focusableElements.forEach(elem => {
-      console.log(elem);
       setFocusable(elem);
    });
    
@@ -16,70 +16,104 @@ function setAllElementFocusable(){
 }
 
 function setFocusable(element){
-   element.addEventListener('click', () => {
-      if(currentSelectElement){
-         currentSelectElement.style.transform = '';
-         if (currentSelectElement.Overlay){
-            currentSelectElement.removeChild(currentSelectElement.Overlay);
-            delete currentSelectElement.Overlay;
-         }
-      }
-      currentSelectElement = element;
-      currentSelectElement.style.transform = 'translate(0, 0)';
-
-      function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
-         Overlay.style.position = "absolute";
-         Overlay.style.border = border;
-         Overlay.style.height = `${hight}px`;
-         Overlay.style.width = `${width}px`;
-         Overlay.style.left =  `${left}px`;
-         Overlay.style.top = `${top}px`;
-         parentElement.appendChild(Overlay);
-      }
-
-      let border = "1px solid blue"
-
-      OverLayerPadding = document.createElement('div');
-      element.Overlay = OverLayerPadding;
-      let paddingHight = currentSelectElement.offsetHeight;
-      let paddingWidth = currentSelectElement.offsetWidth;
-      addOverLayer(element,OverLayerPadding,paddingHight,paddingWidth,0,0,border);
-      
-      OverLayerMargin = document.createElement('div');
-      let marginTop = parseFloat(element.style.marginTop);
-      let marginLeft = parseFloat(element.style.marginLeft);
-      let marginBottom = parseFloat(element.style.marginBottom);
-      let marginRight = parseFloat(element.style.marginRight);
-      let marginHight = paddingHight + marginTop + marginBottom;
-      let marginWidth = paddingWidth + marginLeft + marginRight;
-      addOverLayer(OverLayerPadding,OverLayerMargin,marginHight,marginWidth,-marginTop,-marginLeft,border);
-
-      OverLayerContent = document.createElement('div');
-      let paddingTop = parseFloat(element.style.paddingTop);
-      let paddingLeft = parseFloat(element.style.paddingLeft);
-      let paddingBottom = parseFloat(element.style.paddingBottom);
-      let paddingRight = parseFloat(element.style.paddingRight);
-      let contentHight = paddingHight - paddingTop - paddingBottom;
-      let contentWidth = paddingWidth - paddingLeft - paddingRight;
-      addOverLayer(OverLayerPadding,OverLayerContent,contentHight,contentWidth,paddingTop,paddingLeft,border);
-      
+   element.addEventListener('click', (e) => {
+      setFocus(element);
+      e.stopPropagation();
    });
 }
+
+iframeDoc.addEventListener('click',(e) => {
+   setFocus();
+      e.stopPropagation();
+});
+
+function setFocus(element){
+   if(currentSelectElement){
+      currentSelectElement.style.transform = '';
+      if (currentSelectElement.Overlay){
+         currentSelectElement.removeChild(currentSelectElement.Overlay);
+         delete currentSelectElement.Overlay;
+      }
+   }
+
+   if (element === null && element === undefined){
+      console.log("no element");
+      currentSelectElement = null;
+      return 0;
+   }
+   currentSelectElement = element;
+   
+   console.log("set new focus");
+   console.log(currentSelectElement);
+   currentSelectElement.style.transform = 'translate(0, 0)';
+
+   function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
+      Overlay.style.position = "absolute";
+      Overlay.style.border = border;
+      Overlay.style.height = `${hight}px`;
+      Overlay.style.width = `${width}px`;
+      Overlay.style.left =  `${left}px`;
+      Overlay.style.top = `${top}px`;
+      Overlay.style.pointerEvents = "none";
+      parentElement.appendChild(Overlay);
+   }
+
+   let border = "1px solid blue"
+
+   OverLayerPadding = document.createElement('div');
+   element.Overlay = OverLayerPadding;
+   let paddingHight = currentSelectElement.offsetHeight;
+   let paddingWidth = currentSelectElement.offsetWidth;
+   addOverLayer(element,OverLayerPadding,paddingHight,paddingWidth,0,0,border);
+   
+   OverLayerMargin = document.createElement('div');
+   let marginTop = parseFloat(element.style.marginTop);
+   let marginLeft = parseFloat(element.style.marginLeft);
+   let marginBottom = parseFloat(element.style.marginBottom);
+   let marginRight = parseFloat(element.style.marginRight);
+   let marginHight = paddingHight + marginTop + marginBottom;
+   let marginWidth = paddingWidth + marginLeft + marginRight;
+   addOverLayer(OverLayerPadding,OverLayerMargin,marginHight,marginWidth,-marginTop,-marginLeft,border);
+
+   OverLayerContent = document.createElement('div');
+   let paddingTop = parseFloat(element.style.paddingTop);
+   let paddingLeft = parseFloat(element.style.paddingLeft);
+   let paddingBottom = parseFloat(element.style.paddingBottom);
+   let paddingRight = parseFloat(element.style.paddingRight);
+   let contentHight = paddingHight - paddingTop - paddingBottom;
+   let contentWidth = paddingWidth - paddingLeft - paddingRight;
+   addOverLayer(OverLayerPadding,OverLayerContent,contentHight,contentWidth,paddingTop,paddingLeft,border);
+}
+//-----------------------Sortable--------------------------------------
+
+function createNewSortable(element){
+   Sortable.create(element,{
+      onStart: function (evt) {
+         setFocus(evt.item);
+      },
+      onEnd: function (evt) {
+         setFocus(evt.item);
+      }
+   });
+}
+
+createNewSortable(iframeDoc.body);
 
 //-----------------------addElement------------------------------------
 function addDiv(text){
    newDiv = iframeDoc.createElement('div');
    newDiv.class = "element"; 
-   newDiv.innerHTML = "<p>"+text+"</p>";
+   newDiv.innerHTML = text;
+   $newDiv = $(newDiv);
+   $newDiv.css({
+      "min-width":"10px",
+      "min-hight":"10px",
+      "margin":"5px",
+      "padding":"5px"
+   });
    iframeDoc.body.appendChild(newDiv);
-   newDiv.style.margin = "6px";
-   newDiv.style.padding = "6px";
-   
-   newDiv.draggable="true";
-   newDiv.addEventListener('dragstart', handleDragStart); //用于拖拽该元素
-   newDiv.addEventListener('dragover', handleDragOver); //当处于该元素上方时触发 用于高亮元素
-   newDiv.addEventListener('drop', handleDrop); //用于放置拖拽元素到该元素
-//   console.log("do addDiv");
+   createNewSortable(newDiv);
+   //newDiv.draggable="true";
    setFocusable(newDiv);
    buildDOMTree();
 }

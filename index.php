@@ -10,6 +10,7 @@
    <script src="codeMirror/mode/javascript/javascript.js"></script>
 
    <script src="./js/lib/jquery/jquery.js"></script>
+   <script src="./js/lib/sortableJS/Sortable.js"></script>
    
    <link rel="stylesheet" href="codeMirror/lib/codemirror.css">
    <link rel="stylesheet" href="codeMirror/theme/monokai.css">
