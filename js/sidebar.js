@@ -37,9 +37,11 @@ function sidebarChangeTabRight(elementId){
 
 //------------------------DOMTree---------------------------------------
 function getDOMTree(element, maxDepth = Infinity, currentDepth = 0) {
-
-   //if (currentDepth >= maxDepth) return null;
-   //if (element.nodeType !== 1) return null;
+   if (currentSelectElement){
+      if ( currentSelectElement && element == currentSelectElement.Overlay) return null;
+   }
+   if (currentDepth >= maxDepth) return null;
+   if (element.nodeType !== 1) return null;
    
    //get
    let $element = $(element);
@@ -55,17 +57,20 @@ function getDOMTree(element, maxDepth = Infinity, currentDepth = 0) {
    //execute
    $element.children().each(function() {
       var childNode = getDOMTree(this, maxDepth, currentDepth + 1);
+      //console.log(this);
       if (childNode) {
          obj_DOMTreeNodes.children.push(childNode);
       }
    });
-   
    return obj_DOMTreeNodes;
 }
 
 function buildDOMTree() {
    let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
    let obj_DOMTreeNodes = getDOMTree(iframeDoc.body);
+   if (DOMTreeMainUl.hasChildNodes()){
+      DOMTreeMainUl.innerHTML = '';
+   }
 
    for (let obj_DOMTreeNode of obj_DOMTreeNodes.children) {
       childLi = document.createElement('li');

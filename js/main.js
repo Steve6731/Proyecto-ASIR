@@ -2,7 +2,7 @@ let dragSourceNode = null;
 const iframe = document.getElementById('myIframe');
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
-let currentSelectElement;
+var currentSelectElement;
 
 //-----------------------Current Selected Element----------------------
 
@@ -36,15 +36,15 @@ function setFocus(element){
       }
    }
 
-   if (element === null && element === undefined){
+   if (element === null || element === undefined){
       console.log("no element");
       currentSelectElement = null;
       return 0;
    }
    currentSelectElement = element;
    
-   console.log("set new focus");
-   console.log(currentSelectElement);
+   //console.log("set new focus");
+   //console.log(currentSelectElement);
    currentSelectElement.style.transform = 'translate(0, 0)';
 
    function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
@@ -103,7 +103,9 @@ createNewSortable(iframeDoc.body);
 function addDiv(text){
    newDiv = iframeDoc.createElement('div');
    newDiv.class = "element"; 
-   newDiv.innerHTML = text;
+   if (text){
+      newDiv.innerHTML = text;
+   }
    $newDiv = $(newDiv);
    $newDiv.css({
       "min-width":"10px",
@@ -111,11 +113,18 @@ function addDiv(text){
       "margin":"5px",
       "padding":"5px"
    });
-   iframeDoc.body.appendChild(newDiv);
+
+   if (currentSelectElement){
+      currentSelectElement.appendChild(newDiv);
+      setFocus(currentSelectElement);
+   }else{
+      iframeDoc.body.appendChild(newDiv);
+   }
    createNewSortable(newDiv);
    //newDiv.draggable="true";
    setFocusable(newDiv);
    buildDOMTree();
+   
 }
 
 //----------------------- Drag Element action ----------------------------

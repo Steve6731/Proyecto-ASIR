@@ -11,6 +11,7 @@
       <nav class="nav-menu">
          <div class="nav-item" onclick="addDiv('hello world')"><i>📄</i> hello world</div>
          <div class="nav-item" onclick="addDiv('The quick brown fox jumps over the lazy dog')"><i>📄</i> fox&dog</div>
+         <div class="nav-item" onclick="addDiv()"><i>📄</i> div only</div>
          <div class="nav-item" onclick=""><i>🖼️</i> image</div>
       </nav>
       <div class="sidebar-footer">

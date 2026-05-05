@@ -71,7 +71,6 @@ iframe{
 
 .sidebar {
    width: 320px;
-   color: #e0edf5;
    background-color: white;
    display: flex;
    flex-direction: column;
@@ -170,6 +169,47 @@ iframe{
    font-size: 0.9rem;
    color: #8fa7bc;
 }
+
+/*tabDOMTree*/
+#tabDOMTree{
+   flex: 1;
+   overflow-y: auto;
+   padding: 12px 0 20px 0;
+   min-width: 100%;
+}
+
+
+#tabDOMTree ul{
+   list-style: none;
+   margin: 0;
+   padding: 0;
+
+}
+
+#tabDOMTree li{
+   position: relative;
+   cursor: pointer;
+   transition: background 0.1s;
+   user-select: none;
+   margin: 0 0 0 10px;
+}
+
+#tabDOMTree div {
+   display: flex;
+   align-items: center;
+   padding: 6px 8px 6px 24px;
+   border-radius: 6px;
+   margin: 2px 8px;
+   background: transparent;
+   transition: background 0.1s;
+   position: relative;
+   flex-wrap: wrap;
+}
+
+#tabDOMTree div:hover {
+   background: #3a5a74;
+}
+
 /*sidebar toggle*/
 .menu-toggle {
    background: #FFF;
