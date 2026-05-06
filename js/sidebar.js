@@ -36,77 +36,48 @@ function sidebarChangeTabRight(elementId){
 }
 
 //------------------------DOMTree---------------------------------------
-function getDOMTree(element, maxDepth = Infinity, currentDepth = 0) {
+function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 0) {
    if (currentSelectElement){
       if ( currentSelectElement && element == currentSelectElement.Overlay) return null;
    }
-   if (currentDepth >= maxDepth) return null;
+   //if (currentDepth >= maxDepth) return null;
    if (element.nodeType !== 1) return null;
-   
    //get
-   let $element = $(element);
-   let obj_DOMTreeNodes = {
-      tag: element.tagName,
-      id: element.id || null,
-      class: element.className || null,
-      depth: currentDepth,
-      refElement: element,
-      children: []
-   };
+   let output = element.tagName;
+   if (element.id) output += '#' + element.id;
+   if (element.className) output += '.' + element.className.trim().split(/\s+/).join('.');
+   let newLi = document.createElement('li');
+   let newDiv = document.createElement('div');
+   newDiv.RefElement = element;
+   newDiv.innerHTML = `
+      <span class="sortable-handle">⋮⋮</span>
+      <span class="nodeTag" style="color:gray;padding:0px 2px;">
+         ${element.tagName}
+      </span>
+         ${output}`;
+   newLi.appendChild(newDiv);
+   elementRefUL.appendChild(newLi);
    
-   //execute
-   $element.children().each(function() {
-      var childNode = getDOMTree(this, maxDepth, currentDepth + 1);
-      //console.log(this);
-      if (childNode) {
-         obj_DOMTreeNodes.children.push(childNode);
-      }
-   });
-   return obj_DOMTreeNodes;
-}
-
-function buildDOMTree() {
-   let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
-   let obj_DOMTreeNodes = getDOMTree(iframeDoc.body);
-   if (DOMTreeMainUl.hasChildNodes()){
-      DOMTreeMainUl.innerHTML = '';
-   }
-
-   for (let obj_DOMTreeNode of obj_DOMTreeNodes.children) {
-      childLi = document.createElement('li');
-      DOMTreeMainUl.appendChild(childLi);
-      buildDOMTreeLi(childLi,obj_DOMTreeNode, deep = 0);
+   if (element.children){
+      let childUl = document.createElement('ul');
+      Array.from(element.children).forEach(child => {
+         buildDOMTree(child,childUl, maxDepth, currentDepth + 1);
+      });
+      newLi.appendChild(childUl);
    }
 }
 
-function buildDOMTreeLi(mainLi,obj_DOMTreeNodes, deep = 0) {
-   if (!obj_DOMTreeNodes) return;
-   
-   //let indentStr = '  '.repeat(indent);
-   let output = obj_DOMTreeNodes.tag;
-   
-   if (obj_DOMTreeNodes.id) output += '#' + obj_DOMTreeNodes.id;
-   if (obj_DOMTreeNodes.class) output += '.' + obj_DOMTreeNodes.className.trim().split(/\s+/).join('.');
-   
-   let nodeElement = document.createElement('div');
-   nodeElement.refElement = obj_DOMTreeNodes.refElement;
-   nodeElement.addEventListener('dragstart', handleDragStart); //用于拖拽该元素
-   nodeElement.addEventListener('dragover', handleDragOver); //当处于该元素上方时触发 用于高亮元素
-   nodeElement.addEventListener('drop', handleDropLi); //用于放置拖拽元素到该元素
 
-   nodeElement.innerHTML = `<span class="nodeTag" style="color:gray;padding:0px 2px;">${obj_DOMTreeNodes.tag}</span>${output}`;
-   mainLi.appendChild(nodeElement);
-
-   if (obj_DOMTreeNodes.children.length){
-   childUl = document.createElement('ul');
-
-   for (let child of obj_DOMTreeNodes.children) {
-      childLi = document.createElement('li');
-      childUl.appendChild(childLi);
-      buildDOMTreeLi(childLi,child, deep + 1);
-   }
+/*
+   Sortable.create(childUl,{
+      handle: '.sortable-handle',
+		animation: 150,
+		fallbackOnBody: true,
+   })
+      
    
-   mainLi.appendChild(childUl);
-   }
-}
-
+   Sortable.create(DOMTreeMainUl,{
+      handle: '.sortable-handle',
+		animation: 150,
+		fallbackOnBody: true,
+   })*/

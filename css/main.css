@@ -186,6 +186,15 @@ iframe{
 
 }
 
+#tabDOMTree .sortable-handle {
+  cursor: grab;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 #tabDOMTree li{
    position: relative;
    cursor: pointer;
@@ -195,19 +204,18 @@ iframe{
 }
 
 #tabDOMTree div {
-   display: flex;
    align-items: center;
    padding: 6px 8px 6px 24px;
-   border-radius: 6px;
-   margin: 2px 8px;
    background: transparent;
    transition: background 0.1s;
    position: relative;
    flex-wrap: wrap;
 }
 
-#tabDOMTree div:hover {
-   background: #3a5a74;
+#tabDOMTree div:hover,
+#tabDOMTree div:hover + ul {
+  background-color: #3a5a74;
+  color: white;
 }
 
 /*sidebar toggle*/

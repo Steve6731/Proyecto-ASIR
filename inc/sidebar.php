@@ -20,10 +20,7 @@
    </div>
     <!-- -->
    <div id="tabDOMTree" class="tab Left hidden">
-      <div>Body</div>
-      <ul id="bodyDOMTreeList" class="DOMTreeList">
-
-      </ul>
+      <ul id="bodyDOMTreeList" class="DOMTreeList"> </ul>
    </div>
    <!-- -->
    <div id="tabPaginas"  class="tab Left hidden">

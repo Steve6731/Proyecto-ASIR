@@ -2,6 +2,7 @@ let dragSourceNode = null;
 const iframe = document.getElementById('myIframe');
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
+let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 var currentSelectElement;
 
 //-----------------------Current Selected Element----------------------
@@ -97,7 +98,7 @@ function createNewSortable(element){
    });
 }
 
-createNewSortable(iframeDoc.body);
+createNewSortable(iframeDoc.body,DOMTreeMainUl);
 
 //-----------------------addElement------------------------------------
 function addDiv(text){
@@ -123,7 +124,10 @@ function addDiv(text){
    createNewSortable(newDiv);
    //newDiv.draggable="true";
    setFocusable(newDiv);
-   buildDOMTree();
+   if (DOMTreeMainUl.children.length > 0){
+      DOMTreeMainUl.innerHTML = '';
+   }
+   buildDOMTree(iframeDoc.body,DOMTreeMainUl);
    
 }
 
@@ -190,5 +194,5 @@ function exportIframeContent(iframeElement, fileName = 'index.html') {
 
 // ------------------ inicializacion -------------------
 $(document).ready(function(){
-      buildDOMTree();
+      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
 });
