@@ -4,6 +4,7 @@ const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 var currentSelectElement;
+let canva;
 
 //-----------------------Current Selected Element----------------------
 
@@ -84,6 +85,26 @@ function setFocus(element){
    let contentHight = paddingHight - paddingTop - paddingBottom;
    let contentWidth = paddingWidth - paddingLeft - paddingRight;
    addOverLayer(OverLayerPadding,OverLayerContent,contentHight,contentWidth,paddingTop,paddingLeft,border);
+
+   dragHandleIcon = document.createElement('div');
+   dragHandleIcon.refElement = element;
+   dragHandleIcon.innerHTML="⇲";
+   OverLayerMargin.appendChild(dragHandleIcon);
+   $(dragHandleIcon).css({
+      "width":"2em",
+      "height":"2em",
+      "font-size":"1em",
+      "position":"absolute",
+      "top":" 100%",
+      "left":"calc( 100% - 2em)",
+      "background":"#EEEEEE",
+      "display":" flex",           
+      "justify-content":" center", 
+      "align-items":" center ",
+      "border-radius":"0.5em",
+      "transition":" transform 0.3s ease-out"
+   })
+
 }
 //-----------------------Sortable--------------------------------------
 
@@ -195,4 +216,10 @@ function exportIframeContent(iframeElement, fileName = 'index.html') {
 // ------------------ inicializacion -------------------
 $(document).ready(function(){
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+      
+      Sortable.create(DOMTreeMainUl,{
+         handle: '.sortable-handle',
+         animation: 150,
+         fallbackOnBody: true,
+      })
 });

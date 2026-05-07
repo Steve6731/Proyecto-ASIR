@@ -60,24 +60,14 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    
    if (element.children){
       let childUl = document.createElement('ul');
+      Sortable.create(childUl,{
+         handle: '.sortable-handle',
+         animation: 150,
+         fallbackOnBody: true,
+      })
       Array.from(element.children).forEach(child => {
          buildDOMTree(child,childUl, maxDepth, currentDepth + 1);
       });
       newLi.appendChild(childUl);
    }
 }
-
-
-/*
-   Sortable.create(childUl,{
-      handle: '.sortable-handle',
-		animation: 150,
-		fallbackOnBody: true,
-   })
-      
-   
-   Sortable.create(DOMTreeMainUl,{
-      handle: '.sortable-handle',
-		animation: 150,
-		fallbackOnBody: true,
-   })*/
