@@ -4,7 +4,7 @@ const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 var currentSelectElement;
-let canva;
+var draggedElement; let dragging;
 
 //-----------------------Current Selected Element----------------------
 
@@ -14,9 +14,7 @@ function setAllElementFocusable(){
       setFocusable(elem);
    });
    
-   console.log("do setFocous");
 }
-
 function setFocusable(element){
    element.addEventListener('click', (e) => {
       setFocus(element);
@@ -26,10 +24,10 @@ function setFocusable(element){
 
 iframeDoc.addEventListener('click',(e) => {
    setFocus();
-      e.stopPropagation();
+   e.stopPropagation();
 });
 
-function setFocus(element){
+function setFocus(element,showOverlay = true){
    if(currentSelectElement){
       currentSelectElement.style.transform = '';
       if (currentSelectElement.Overlay){
@@ -39,14 +37,11 @@ function setFocus(element){
    }
 
    if (element === null || element === undefined){
-      console.log("no element");
       currentSelectElement = null;
       return 0;
    }
    currentSelectElement = element;
    
-   //console.log("set new focus");
-   //console.log(currentSelectElement);
    currentSelectElement.style.transform = 'translate(0, 0)';
 
    function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
@@ -61,13 +56,17 @@ function setFocus(element){
    }
 
    let border = "1px solid blue"
-
    OverLayerPadding = document.createElement('div');
    element.Overlay = OverLayerPadding;
    let paddingHight = currentSelectElement.offsetHeight;
    let paddingWidth = currentSelectElement.offsetWidth;
    addOverLayer(element,OverLayerPadding,paddingHight,paddingWidth,0,0,border);
    
+   if (showOverlay){
+      $(OverLayerPadding).show();
+   }else{
+      $(OverLayerPadding).hide();
+   }
    OverLayerMargin = document.createElement('div');
    let marginTop = parseFloat(element.style.marginTop);
    let marginLeft = parseFloat(element.style.marginLeft);
@@ -88,9 +87,11 @@ function setFocus(element){
 
    dragHandleIcon = document.createElement('div');
    dragHandleIcon.refElement = element;
+   dragHandleIcon.setAttribute('draggable', 'true');
    dragHandleIcon.innerHTML="⇲";
    OverLayerMargin.appendChild(dragHandleIcon);
    $(dragHandleIcon).css({
+      "pointer-events": "auto", 
       "width":"2em",
       "height":"2em",
       "font-size":"1em",
@@ -98,28 +99,42 @@ function setFocus(element){
       "top":" 100%",
       "left":"calc( 100% - 2em)",
       "background":"#EEEEEE",
-      "display":" flex",           
-      "justify-content":" center", 
+      "display":" flex",
+      "justify-content":" center",
       "align-items":" center ",
       "border-radius":"0.5em",
-      "transition":" transform 0.3s ease-out"
+      "transition":" transform 0.3s ease-out",
    })
+
+   dragHandleIcon.addEventListener('dragstart', (e) => {
+      draggedElement = e.currentTarget.refElement;
+      dragging = true;
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+   });
 
 }
 //-----------------------Sortable--------------------------------------
 
 function createNewSortable(element){
    Sortable.create(element,{
+      group: {
+         name: 'shared',
+         pull: false, 
+         revertClone: false,
+      },
+		animation: 150,
+      //swapThreshold: 0.05,
+      
       onStart: function (evt) {
-         setFocus(evt.item);
+         setFocus(evt.item,false);
       },
       onEnd: function (evt) {
-         setFocus(evt.item);
+         setFocus(evt.item,true);
       }
+
    });
 }
-
-createNewSortable(iframeDoc.body,DOMTreeMainUl);
 
 //-----------------------addElement------------------------------------
 function addDiv(text){
@@ -143,40 +158,32 @@ function addDiv(text){
       iframeDoc.body.appendChild(newDiv);
    }
    createNewSortable(newDiv);
-   //newDiv.draggable="true";
+   
    setFocusable(newDiv);
-   if (DOMTreeMainUl.children.length > 0){
-      DOMTreeMainUl.innerHTML = '';
-   }
+   
+
+   newDiv.addEventListener('dragover', (e) => {
+      if (!dragging) return null;
+      e.dataTransfer.dropEffect = 'move';
+      e.preventDefault();
+      e.stopPropagation();
+   });
+
+   newDiv.addEventListener('drop', (e) => {
+      if (!dragging) return null;
+      e.currentTarget.appendChild(draggedElement);
+      createNewSortable(e.currentTarget);
+      createNewSortable(draggedElement);
+      draggedElement = null;
+      e.preventDefault();
+      e.stopPropagation();
+      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+   });
+
    buildDOMTree(iframeDoc.body,DOMTreeMainUl);
    
 }
 
-//----------------------- Drag Element action ----------------------------
-
-function handleDragStart(event) {
-   event.dataTransfer.setData('text/plain', '');
-   event.dataTransfer.effectAllowed = 'move';
-   dragSourceNode = event.currentTarget;
-   event.stopPropagation();
-}
-function handleDragOver(event) {
-   event.preventDefault();
-   event.dataTransfer.dropEffect = 'move';
-}
-
-function handleDrop(event) {
-   const targetContent = event.currentTarget;
-   targetContent.insertAdjacentElement('afterend', dragSourceNode);
-}
-
-function handleDropLi(event) {
-   const targetContent = event.currentTarget;
-   const refTargetContent = targetContent.refElement;
-   const refDragSourceNode = dragSourceNode.refElement;
-   targetContent.insertAdjacentElement('afterend', dragSourceNode);
-   refTargetContent.insertAdjacentElement('afterend', refDragSourceNode);
-}
 //-----------------------leftClickMenu------------------------------------
 const menu = document.getElementById("leftClickMenu");
 
@@ -216,6 +223,8 @@ function exportIframeContent(iframeElement, fileName = 'index.html') {
 // ------------------ inicializacion -------------------
 $(document).ready(function(){
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+      iframeDoc.body.style.padding = "20px 0";
+      createNewSortable(iframeDoc.body);
       
       Sortable.create(DOMTreeMainUl,{
          handle: '.sortable-handle',

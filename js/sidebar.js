@@ -40,6 +40,10 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    if (currentSelectElement){
       if ( currentSelectElement && element == currentSelectElement.Overlay) return null;
    }
+   
+   if (elementRefUL.children.length > 0){
+      elementRefUL.innerHTML = '';
+   }
    //if (currentDepth >= maxDepth) return null;
    if (element.nodeType !== 1) return null;
    //get
