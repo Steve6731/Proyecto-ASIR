@@ -187,6 +187,7 @@ iframe{
 
 #tabDOMTree .sortable-handle {
   cursor: grab;
+  pointer-events: "auto";
   width: 24px;
   height: 24px;
   background-size: contain;
@@ -212,7 +213,8 @@ iframe{
 }
 
 #tabDOMTree div:hover,
-#tabDOMTree div:hover + ul {
+#tabDOMTree div:hover + ul,
+#tabDOMTree li.hover{
   background-color: #3a5a74;
   color: white;
 }

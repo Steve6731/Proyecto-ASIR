@@ -5,6 +5,7 @@ let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 var currentSelectElement;
 var draggedElement; let dragging;
+var draggedDOMTreeElement; var currentHoverElement;
 
 //-----------------------Current Selected Element----------------------
 
@@ -136,6 +137,16 @@ function createNewSortable(element){
    });
 }
 
+function createNewUlSortable(elementUl){
+   Sortable.create(elementUl,{
+      handle: '.sortable-handle',
+      animation: 150,
+      onStart: function () {
+         console.log("start")
+      },
+   });
+}
+
 //-----------------------addElement------------------------------------
 function addDiv(text){
    newDiv = iframeDoc.createElement('div');
@@ -175,6 +186,7 @@ function addDiv(text){
       createNewSortable(e.currentTarget);
       createNewSortable(draggedElement);
       draggedElement = null;
+      dragging = false;
       e.preventDefault();
       e.stopPropagation();
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
@@ -222,13 +234,9 @@ function exportIframeContent(iframeElement, fileName = 'index.html') {
 
 // ------------------ inicializacion -------------------
 $(document).ready(function(){
-      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
       iframeDoc.body.style.padding = "20px 0";
       createNewSortable(iframeDoc.body);
       
-      Sortable.create(DOMTreeMainUl,{
-         handle: '.sortable-handle',
-         animation: 150,
-         fallbackOnBody: true,
-      })
+      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+      createNewUlSortable(DOMTreeMainUl);
 });
