@@ -110,6 +110,7 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    });
    
    let childUl = document.createElement('ul');
+   childUl.RefElement = element;
    newLi.RefUl = childUl;
    newLi.appendChild(childUl);
 

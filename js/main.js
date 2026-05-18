@@ -3,6 +3,7 @@ const iframe = document.getElementById('myIframe');
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
+DOMTreeMainUl.refElement=iframeDoc;
 var currentSelectElement;
 var draggedElement; let dragging;
 var draggedDOMTreeElement; var currentHoverElement;
@@ -144,8 +145,30 @@ function createNewUlSortable(elementUl){
       onStart: function () {
          console.log("start")
       },
+      onEnd: function (evt) {
+         sortRefElement(evt);
+      },
    });
 }
+
+function sortRefElement(event){
+   let dragElement = event.item;
+   let targetUlElement = event.to;
+      console.log(targetUlElement);
+      console.log(event.to.RefElement);
+   let indexTargetUlElement = event.newIndex;
+   if (indexTargetUlElement == 0){
+      targetUlElement.RefElement.prepend(dragElement.RefElement);
+   }else if(indexTargetUlElement > 0){
+      let previousElement = targetUlElement.RefElement.childNodes[indexTargetUlElement-1];
+      previousElement.after(dragElement.RefElement);
+   }
+}
+
+function getElementIndex(element){
+   Array.from(element.parentNode.childNodes).indexOf(element);
+}
+
 
 //-----------------------addElement------------------------------------
 function addDiv(text){
