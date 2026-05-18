@@ -151,18 +151,21 @@ function createNewUlSortable(elementUl){
    });
 }
 
-function sortRefElement(event){
-   let dragElement = event.item;
-   let targetUlElement = event.to;
-      console.log(targetUlElement);
-      console.log(event.to.RefElement);
-   let indexTargetUlElement = event.newIndex;
-   if (indexTargetUlElement == 0){
-      targetUlElement.RefElement.prepend(dragElement.RefElement);
-   }else if(indexTargetUlElement > 0){
-      let previousElement = targetUlElement.RefElement.childNodes[indexTargetUlElement-1];
-      previousElement.after(dragElement.RefElement);
-   }
+function sortRefElement(event) {
+    let dragElement = event.item;
+    let targetUl = event.to;
+    let newIndex = event.newIndex;
+    let dragNode = dragElement.RefElement || dragElement;
+    let targetParent = targetUl.RefElement || targetUl;
+    let childCount = targetParent.childElementCount;
+    if (newIndex >= childCount - 1) {
+        targetParent.appendChild(dragNode);
+    } else {
+        let referenceNode = targetParent.children[newIndex];
+        referenceNode.before(dragNode);
+    }
+    dragElement.draggable=true;
+    //newLiAddEventListener(dragElement);
 }
 
 function getElementIndex(element){
@@ -259,7 +262,4 @@ function exportIframeContent(iframeElement, fileName = 'index.html') {
 $(document).ready(function(){
       iframeDoc.body.style.padding = "20px 0";
       createNewSortable(iframeDoc.body);
-      
-      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
-      createNewUlSortable(DOMTreeMainUl);
 });

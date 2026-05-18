@@ -60,26 +60,23 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    elementRefUL.appendChild(newLi);
    newLi.draggable = true;
 
-   newLi.addEventListener('dragstart', (e) => {
-      let realTarget = document.elementFromPoint(e.clientX, e.clientY);
-      if (realTarget && realTarget.closest('.sortable-handle')) return null;
-      draggedDOMTreeElement = e.currentTarget;
-      dragging = true;
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-   });
 
-   newLi.addEventListener('dragover', (e) => {
-      if (!dragging) return null;
-      e.preventDefault();
-      e.stopPropagation();
-      e.dataTransfer.dropEffect = 'move';
-      if( currentHoverElement != undefined && currentHoverElement.classList.contains('hover'))
-         currentHoverElement.classList.remove('hover');
-      e.currentTarget.classList.add('hover');
-      currentHoverElement = e.currentTarget
-   });
+   newLiAddEventListener(newLi);
+   
+   let childUl = document.createElement('ul');
+   childUl.RefElement = element;
+   newLi.RefUl = childUl;
+   newLi.appendChild(childUl);
 
+   if (element.children.length != 0){
+      Array.from(element.children).forEach(child => {
+         buildDOMTree(child,childUl, maxDepth, currentDepth + 1);
+      });
+      createNewUlSortable(childUl);
+   }
+}
+
+function newLiAddEventListener(newLi){
    newLi.addEventListener('drop', (e) => {
       if (!dragging) return null;
       e.preventDefault();
@@ -109,15 +106,30 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
       e.stopPropagation();
    });
    
-   let childUl = document.createElement('ul');
-   childUl.RefElement = element;
-   newLi.RefUl = childUl;
-   newLi.appendChild(childUl);
+   newLi.addEventListener('dragstart', (e) => {
+      let realTarget = document.elementFromPoint(e.clientX, e.clientY);
+      if (realTarget && realTarget.closest('.sortable-handle')) return null;
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      console.log(e.currentTarget);
+      draggedDOMTreeElement = e.currentTarget;
+      dragging = true;
+   });
 
-   if (element.children.length != 0){
-      Array.from(element.children).forEach(child => {
-         buildDOMTree(child,childUl, maxDepth, currentDepth + 1);
-      });
-      createNewUlSortable(childUl);
-   }
+   newLi.addEventListener('dragover', (e) => {
+      if (!dragging) return null;
+      e.preventDefault();
+      e.stopPropagation();
+      e.dataTransfer.dropEffect = 'move';
+      if( currentHoverElement != undefined && currentHoverElement.classList.contains('hover'))
+         currentHoverElement.classList.remove('hover');
+      e.currentTarget.classList.add('hover');
+      currentHoverElement = e.currentTarget
+   });
 }
+//------------------ inicializacion -------------------
+
+$(document).ready(function(){
+      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+      createNewUlSortable(DOMTreeMainUl);
+});
