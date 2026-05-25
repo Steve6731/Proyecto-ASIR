@@ -129,7 +129,7 @@ function newLiAddEventListener(newLi){
 }
 //------------------ inicializacion -------------------
 
-$(document).ready(function(){
+$(iframe).ready(function(){
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
       createNewUlSortable(DOMTreeMainUl);
 });

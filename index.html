@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>Proyect</title>
+
+   <!-- codemirror Corelib -->
+   <script src="codeMirror/lib/codemirror.js"></script>
+   <!-- JavaScript for codeMirror-->
+   <script src="codeMirror/mode/javascript/javascript.js"></script>
+
+   <script src="./js/lib/jquery/jquery.js"></script>
+   <script src="./js/lib/sortableJS/Sortable.js"></script>
+   
+   <link rel="stylesheet" href="codeMirror/lib/codemirror.css">
+   <link rel="stylesheet" href="codeMirror/theme/monokai.css">
+   <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+
+   <iframe id="myIframe" src="about:blank"
+   srcdoc="
+   <head>
+      <style id=templateCSS> * {user-select: none;}</style>
+      <meta charset='UTF-8'>
+      <title>MyFirstWeb</title>
+   </head>
+   <body></body>
+   ">
+   </iframe>
+
+   <div id="editArea">
+   <textarea id="myEditor" sytle=" position:fixed; top:100vh;">
+   // Esto es solo un ejemplo para probar cómo funciona CodeMirror, 
+   // por favor, no le den importancia.
+
+   function greet(name) {
+      console.log("Hello, " + name);
+   }
+   </textarea>
+   </div>
+   <script>
+      var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('myEditor'), {
+         lineNumbers: true,
+         mode: "javascript",
+         theme: "monokai",
+         lineWrapping: true
+      });
+   </script>
+
+   <div id="leftClickMenu" class="custom-menu">
+   <ul>
+      <li onclick="removeCurrentSelectElement()">Delete</li>
+      <hr>
+      <li onclick="">Property</li>
+      <hr>
+      <li onclick="exportIframeContent(iframe)">Exportar</li>
+   </ul>
+   </div>
+
+   <div class="sidebar Left" id="sidebarLeft">
+      <button class="menu-toggle Left" id="toggleSidebarBtnLeft"> ☰ </button>
+      <!-- -->
+      <div class="tabs Left">
+         <div><button onclick="sidebarChangeTabLeft('tabElement')">Element</button></div>
+         <div><button onclick="sidebarChangeTabLeft('tabDOMTree')">DOM Tree</button></div>
+         <div><button onclick="sidebarChangeTabLeft('tabPaginas')">Paginas</button></div>
+      </div>
+      <!-- -->
+      <div id="tabElement" class="tab Left">
+         <nav class="nav-menu">
+            <div class="nav-item" onclick="addDiv('hello world')"><i>📄</i> hello world</div>
+            <div class="nav-item" onclick="addDiv('The quick brown fox jumps over the lazy dog')"><i>📄</i> fox&dog</div>
+            <div class="nav-item" onclick="addDiv()"><i>📄</i> div only</div>
+            <div class="nav-item" onclick=""><i>🖼️</i> image</div>
+         </nav>
+         <div class="sidebar-footer">
+            <div>Espero que disfrutes diseñando la página web y que el resultado sea perfecto.</div>
+         </div>
+      </div>
+      <!-- -->
+      <div id="tabDOMTree" class="tab Left hidden">
+         <ul id="bodyDOMTreeList" class="DOMTreeList"> </ul>
+      </div>
+      <!-- -->
+      <div id="tabPaginas"  class="tab Left hidden">
+         <nav class="nav-menu">
+            <div class="nav-item" > por ahora no hay nada</div>
+            <div class="nav-item" > por ahora no hay nada</div>
+            <div class="nav-item" > por ahora no hay nada</div>
+         </nav>
+      </div>
+      <!-- -->
+   </div>
+
+   <div class="sidebar Right" id="sidebarRight">
+      <button class="menu-toggle Right" id="toggleSidebarBtnRight"> ☰ </button>
+      <!-- -->
+      <div class="tabs Right">
+         <div><button onclick="sidebarChangeTabRight('elementConfig')">Element</button></div>
+         <div><button onclick="sidebarChangeTabRight('webConfig')">DOM Tree</button></div>
+      </div>
+      <!-- -->
+      <div id="elementConfig" class="tab Right ">
+         <nav class="nav-menu">
+            <div>(Pendiente)</div>
+            <div>(Pendiente)</div>
+            <div>(Pendiente)</div>
+         </nav>
+      </div>
+      <!-- -->
+      <div id="webConfig" class="tab Right hidden">
+         <nav class="nav-menu">
+            <div>(vacio)</div>
+            <div>(vacio)</div>
+            <div>(vacio)</div>
+         </nav>
+      </div>
+      <!-- -->
+      <!-- -->
+   </div>
+
+   <script src="./js/main.js"></script>
+   <script src="./js/sidebar.js"></script>
+</body>
+</html>

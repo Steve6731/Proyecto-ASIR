@@ -173,7 +173,7 @@ function getElementIndex(element){
 }
 
 
-//-----------------------addElement------------------------------------
+//-----------------------Element Manager--------------------------
 function addDiv(text){
    newDiv = iframeDoc.createElement('div');
    newDiv.class = "element"; 
@@ -220,6 +220,14 @@ function addDiv(text){
 
    buildDOMTree(iframeDoc.body,DOMTreeMainUl);
    
+}
+
+function removeCurrentSelectElement(){
+   if (currentSelectElement){
+      currentSelectElement.remove();
+      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+      menu.style.display = 'none';
+   }
 }
 
 //-----------------------leftClickMenu------------------------------------
