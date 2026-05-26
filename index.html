@@ -18,17 +18,18 @@
 
 </head>
 <body>
-
-   <iframe id="myIframe" src="about:blank"
-   srcdoc="
-   <head>
-      <style id=templateCSS> * {user-select: none;}</style>
-      <meta charset='UTF-8'>
-      <title>MyFirstWeb</title>
-   </head>
-   <body></body>
-   ">
-   </iframe>
+   <div id="iframeView">
+      <iframe id="myIframe" src="about:blank"
+      srcdoc="
+         <head>
+            <style id=templateCSS> * {user-select: none;}</style>
+            <meta charset='UTF-8'>
+            <title>MyFirstWeb</title>
+         </head>
+         <body></body>
+      ">
+      </iframe>
+   </div>
 
    <div id="editArea">
    <textarea id="myEditor" sytle=" position:fixed; top:100vh;">
@@ -94,7 +95,7 @@
       <!-- -->
    </div>
 
-   <div class="sidebar Right" id="sidebarRight">
+   <div class="sidebar Right hidden" id="sidebarRight">
       <button class="menu-toggle Right" id="toggleSidebarBtnRight"> ☰ </button>
       <!-- -->
       <div class="tabs Right">
@@ -121,7 +122,15 @@
       <!-- -->
    </div>
 
+   <div id="bottomToolbar" class="bottom-toolbar">
+      <button class="toolbar-btn" onclick="moveIframeToggle(this)">✋</button>
+      <button class="toolbar-btn" >🔍</button>
+      <button class="toolbar-btn" >🔔</button>
+      <button class="toolbar-btn" >👤</button>
+   </div>
+
    <script src="./js/main.js"></script>
    <script src="./js/sidebar.js"></script>
+   <script src="./js/iframeView.js"></script>
 </body>
 </html>
