@@ -1,5 +1,8 @@
 let dragSourceNode = null;
+let IframeScale = 0.5;
 const iframe = document.getElementById('myIframe');
+let $iframe = $(iframe);
+let iframeRect = iframe.getBoundingClientRect();
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
@@ -34,6 +37,8 @@ function setFocus(element,showOverlay = true){
       currentSelectElement.style.transform = '';
       if (currentSelectElement.Overlay){
          currentSelectElement.removeChild(currentSelectElement.Overlay);
+         iframeView.removeChild(currentSelectElement.dragHandleIcon);
+         delete currentSelectElement.dragHandleIcon;
          delete currentSelectElement.Overlay;
       }
    }
@@ -91,14 +96,15 @@ function setFocus(element,showOverlay = true){
    dragHandleIcon.refElement = element;
    dragHandleIcon.setAttribute('draggable', 'true');
    dragHandleIcon.innerHTML="⇲";
-   OverLayerMargin.appendChild(dragHandleIcon);
+   element.dragHandleIcon = dragHandleIcon;
+   iframeView.appendChild(dragHandleIcon);
    $(dragHandleIcon).css({
       "pointer-events": "auto", 
       "width":"2em",
       "height":"2em",
       "font-size":"1em",
       "position":"absolute",
-      "top":" 100%",
+      "top":" calc( 100% - 2em)",
       "left":"calc( 100% - 2em)",
       "background":"#EEEEEE",
       "display":" flex",
@@ -235,18 +241,26 @@ const menu = document.getElementById("leftClickMenu");
 
 iframeDoc.addEventListener('contextmenu',function(e){
    e.preventDefault();
+   menu.style.display = 'block';
+   menu.style.position = "absolute";
+   menu.style.left = e.clientX*IframeScale+iframeRect.left + 'px';
+   menu.style.top = e.clientY*IframeScale+iframeRect.top + 'px';
+})
 
+document.addEventListener('contextmenu',function(e){
+   e.preventDefault();
    menu.style.display = 'block';
    menu.style.position = "fixed";
    menu.style.left = e.clientX + 'px';
    menu.style.top = e.clientY + 'px';
 })
-
+document.addEventListener('click', function(){menu.style.display = 'none';});
 iframeDoc.addEventListener('click', function(){menu.style.display = 'none';});
 menu.addEventListener('click', function(e){e.stopPropagation()});
 
 //-------------------------exportIframe-----------------------------------
 function exportIframeContent(iframeElement, fileName = 'index.html') {
+   setFocus();//eliminar overlay
   const doc = iframeElement.contentDocument || iframeElement.contentWindow.document;
   
   const fullHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;

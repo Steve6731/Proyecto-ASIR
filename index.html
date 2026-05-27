@@ -18,6 +18,17 @@
 
 </head>
 <body>
+   
+   <div id="leftClickMenu" class="custom-menu">
+      <ul>
+         <li onclick="removeCurrentSelectElement()">Delete</li>
+         <hr>
+         <li onclick="">Property</li>
+         <hr>
+         <li onclick="exportIframeContent(iframe)">Exportar</li>
+      </ul>
+   </div>
+
    <div id="iframeView">
       <iframe id="myIframe" src="about:blank"
       srcdoc="
@@ -50,15 +61,6 @@
       });
    </script>
 
-   <div id="leftClickMenu" class="custom-menu">
-   <ul>
-      <li onclick="removeCurrentSelectElement()">Delete</li>
-      <hr>
-      <li onclick="">Property</li>
-      <hr>
-      <li onclick="exportIframeContent(iframe)">Exportar</li>
-   </ul>
-   </div>
 
    <div class="sidebar Left" id="sidebarLeft">
       <button class="menu-toggle Left" id="toggleSidebarBtnLeft"> ☰ </button>
@@ -123,6 +125,14 @@
    </div>
 
    <div id="bottomToolbar" class="bottom-toolbar">
+      <select id="IframeScaleController">
+         <option value="0.25">25%</option>
+         <option value="0.50" selected>50%</option>
+         <option value="1.00">100%</option>
+         <option value="1.50">150%</option>
+         <option value="2.00">200%</option>
+         <option value="3.00">300%</option>
+      </select>
       <button class="toolbar-btn" onclick="moveIframeToggle(this)">✋</button>
       <button class="toolbar-btn" >🔍</button>
       <button class="toolbar-btn" >🔔</button>

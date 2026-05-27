@@ -13,6 +13,20 @@ function moveIframeToggle(element){
    }
 }
 
+document.getElementById('IframeScaleController').addEventListener('change', function(e) {
+   setIframeScale(e.target.value)
+});
+
+function setIframeScale(Scale){
+   console.log("do setIframeScale")
+   IframeScale = Scale;
+   $iframe.css({
+      "transform": `scale(${Scale})`,
+      "top":`calc(-100% * ( 1 - ${Scale} ) )`,
+      "left":`calc(-100% * ( 1 - ${Scale} ) )`,
+   });   
+}
+
 iframeView.addEventListener('pointerdown', function (e) {
    //Si haces clic con el boton izquierdo del raton
    if (e.button === 0 ) {
