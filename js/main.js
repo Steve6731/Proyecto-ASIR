@@ -2,7 +2,6 @@ let dragSourceNode = null;
 let IframeScale = 0.5;
 const iframe = document.getElementById('myIframe');
 let $iframe = $(iframe);
-let iframeRect = iframe.getBoundingClientRect();
 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
@@ -243,6 +242,7 @@ iframeDoc.addEventListener('contextmenu',function(e){
    e.preventDefault();
    menu.style.display = 'block';
    menu.style.position = "absolute";
+   let iframeRect = iframe.getBoundingClientRect();
    menu.style.left = e.clientX*IframeScale+iframeRect.left + 'px';
    menu.style.top = e.clientY*IframeScale+iframeRect.top + 'px';
 })
