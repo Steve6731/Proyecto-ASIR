@@ -9,6 +9,7 @@ DOMTreeMainUl.refElement=iframeDoc;
 var currentSelectElement;
 var draggedElement; let dragging;
 var draggedDOMTreeElement; var currentHoverElement;
+let fileInput = document.getElementById("fileInput");
 
 //-----------------------Current Selected Element----------------------
 
@@ -35,7 +36,7 @@ function setFocus(element,showOverlay = true){
    if(currentSelectElement){
       currentSelectElement.style.transform = '';
       if (currentSelectElement.Overlay){
-         currentSelectElement.removeChild(currentSelectElement.Overlay);
+         iframeDoc.body.removeChild(currentSelectElement.Overlay);
          iframeView.removeChild(currentSelectElement.dragHandleIcon);
          delete currentSelectElement.dragHandleIcon;
          delete currentSelectElement.Overlay;
@@ -47,7 +48,7 @@ function setFocus(element,showOverlay = true){
       return 0;
    }
    currentSelectElement = element;
-   
+   let elementRect = element.getBoundingClientRect();
    currentSelectElement.style.transform = 'translate(0, 0)';
 
    function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
@@ -66,7 +67,7 @@ function setFocus(element,showOverlay = true){
    element.Overlay = OverLayerPadding;
    let paddingHight = currentSelectElement.offsetHeight;
    let paddingWidth = currentSelectElement.offsetWidth;
-   addOverLayer(element,OverLayerPadding,paddingHight,paddingWidth,0,0,border);
+   addOverLayer(iframeDoc.body,OverLayerPadding,paddingHight,paddingWidth,elementRect.top,elementRect.left,border);
    
    if (showOverlay){
       $(OverLayerPadding).show();
@@ -179,14 +180,14 @@ function getElementIndex(element){
 
 
 //-----------------------Element Manager--------------------------
-function addDiv(text){
-   newDiv = iframeDoc.createElement('div');
-   newDiv.class = "element"; 
+function addElement(tagName,text){
+   let newElement = iframeDoc.createElement(tagName);
+   newElement.class = "element"; 
    if (text){
-      newDiv.innerHTML = text;
+      newElement.innerHTML = text;
    }
-   $newDiv = $(newDiv);
-   $newDiv.css({
+   $newElement = $(newElement);
+   $newElement.css({
       "min-width":"10px",
       "min-hight":"10px",
       "margin":"5px",
@@ -194,24 +195,31 @@ function addDiv(text){
    });
 
    if (currentSelectElement){
-      currentSelectElement.appendChild(newDiv);
+      currentSelectElement.appendChild(newElement);
       setFocus(currentSelectElement);
    }else{
-      iframeDoc.body.appendChild(newDiv);
+      iframeDoc.body.appendChild(newElement);
    }
-   createNewSortable(newDiv);
+   createNewSortable(newElement);
    
-   setFocusable(newDiv);
+   setFocusable(newElement);
+
+   if (tagName == "img"){
+      newElement.src = "./img/1.png";
+      newElement.addEventListener('dblclick', function() {
+            fileInput.click();
+      });
+   }
    
 
-   newDiv.addEventListener('dragover', (e) => {
+   newElement.addEventListener('dragover', (e) => {
       if (!dragging) return null;
       e.dataTransfer.dropEffect = 'move';
       e.preventDefault();
       e.stopPropagation();
    });
 
-   newDiv.addEventListener('drop', (e) => {
+   newElement.addEventListener('drop', (e) => {
       if (!dragging) return null;
       e.currentTarget.appendChild(draggedElement);
       createNewSortable(e.currentTarget);
