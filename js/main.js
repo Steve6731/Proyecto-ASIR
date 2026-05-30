@@ -67,7 +67,10 @@ function setFocus(element,showOverlay = true){
    element.Overlay = OverLayerPadding;
    let paddingHight = currentSelectElement.offsetHeight;
    let paddingWidth = currentSelectElement.offsetWidth;
-   addOverLayer(iframeDoc.body,OverLayerPadding,paddingHight,paddingWidth,elementRect.top,elementRect.left,border);
+   let paddingY = elementRect.top  + iframe.contentWindow.scrollY;
+   let paddingX = elementRect.left + iframe.contentWindow.scrollX;
+   
+   addOverLayer(iframeDoc.body,OverLayerPadding,paddingHight,paddingWidth,paddingY,paddingX,border);
    
    if (showOverlay){
       $(OverLayerPadding).show();
@@ -206,8 +209,10 @@ function addElement(tagName,text){
 
    if (tagName == "img"){
       newElement.src = "./img/1.png";
-      newElement.addEventListener('dblclick', function() {
+      newElement.addEventListener('dblclick', function(e) {
+            fileInput.currentTarget = e.currentTarget;
             fileInput.click();
+            setFocus();
       });
    }
    
@@ -252,7 +257,7 @@ iframeDoc.addEventListener('contextmenu',function(e){
    menu.style.position = "absolute";
    let iframeRect = iframe.getBoundingClientRect();
    menu.style.left = e.clientX*IframeScale+iframeRect.left + 'px';
-   menu.style.top = e.clientY*IframeScale+iframeRect.top + 'px';
+   menu.style.top  = e.clientY*IframeScale+iframeRect.top  + 'px';
 })
 
 document.addEventListener('contextmenu',function(e){
@@ -260,7 +265,7 @@ document.addEventListener('contextmenu',function(e){
    menu.style.display = 'block';
    menu.style.position = "fixed";
    menu.style.left = e.clientX + 'px';
-   menu.style.top = e.clientY + 'px';
+   menu.style.top = e.clientY  + 'px';
 })
 document.addEventListener('click', function(){menu.style.display = 'none';});
 iframeDoc.addEventListener('click', function(){menu.style.display = 'none';});
