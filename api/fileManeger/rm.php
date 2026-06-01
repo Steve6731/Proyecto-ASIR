@@ -93,7 +93,7 @@ if (is_dir($fullPath)) {
     if (unlink($fullPath)) {
         echo json_encode([
             'success' => true,
-            'message' => 'Delete documento correctamente',
+            'message' => 'Delete documento correctly',
             'path' => $fullPath
         ]);
     } else {

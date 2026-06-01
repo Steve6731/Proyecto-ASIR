@@ -272,95 +272,61 @@ iframeDoc.addEventListener('click', function(){menu.style.display = 'none';});
 menu.addEventListener('click', function(e){e.stopPropagation()});
 
 //-------------------------exportIframe-----------------------------------
-async function exportIframeContent(iframeElement, fileName = 'WebSite.zip') {
-    if (typeof setFocus === 'function') setFocus();
+async function exportIframeContent(iframeElement, zipName = 'Web.zip') {
+    setFocus(); // remove overlay
     
+    // get iframe 
     const doc = iframeElement.contentDocument || iframeElement.contentWindow.document;
-    const clonedDoc = doc.cloneNode(true);
-    
-    // obtener <img>
-    const images = clonedDoc.querySelectorAll('img');
-    const imageMap = new Map(); // almacena { originalSrc, blob, localPath }
-    
-    // Imagen
-    for (let i = 0; i < images.length; i++) {
-        const img = images[i];
-        const src = img.getAttribute('src');
-        
-        if (!src) continue;
-        
-        const isExternalUrl = /^https?:\/\//i.test(src); //es imagen externa
-        const isDataUrl = src.startsWith('data:');//es data base64
-        
-        if (isExternalUrl || isDataUrl) continue; // salta al seguiente imagen
-        
-        // direccion local
-        try {
-            let blob;
-            let actualUrl = src;
-            
-            //traducir direccion relativa al direccion absoluto
-            if (!src.startsWith('/') && !src.startsWith('http')) {
-                // es direccion relativo
-                const baseUrl = doc.baseURI;
-                actualUrl = new URL(src, baseUrl).href;
-            } else if (src.startsWith('/')) {
-                // es direccion absoluto
-                actualUrl = new URL(src, window.location.origin).href;
-            }
-            
-            // descargar con blob
-            const response = await fetch(actualUrl);
-            if (!response.ok) {
-                console.warn(`Can not find image: ${actualUrl}`);
-                continue;
-            }
-            blob = await response.blob();
-            
-            // genera unico filename
-            const urlObj = new URL(actualUrl);
-            let filename = urlObj.pathname.split('/').pop();
-            if (!filename || !filename.includes('.')) {
-                filename = `image_${i}_${Date.now()}.${blob.type.split('/')[1] || 'png'}`;
-            }
-            
-            // guarda al ./img
-            const localPath = `img/${filename}`;
-            imageMap.set(localPath, blob);
-            
-            // actualiza path al local
-            img.setAttribute('src', localPath);
-            
-        } catch (error) {
-            console.warn(`Error: ${src}`, error);
-        }
-    }
-    
-    // obtener contenido completo de iframe
-    const fullHtml = '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML;
-    const htmlBlob = new Blob([fullHtml], { type: 'text/html' });
-    
-    // crear zip
+    const fullHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
     const zip = new JSZip();
     
-    // añadir html al zip
-    zip.file(fileName.replace('.zip', '.html'), htmlBlob);
+    // add index.html
+    zip.file('index.html', fullHtml);
     
-    // añadir imagen al zip
-    for (const [localPath, blob] of imageMap.entries()) {
-        zip.file(localPath, blob);
-    }
-    
-    // descarga ZIP
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
-    const url = URL.createObjectURL(zipBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    try {
+      let imagesFiles = await phpLs("./img/")
+      let paths = imagesFiles.paths;
+      // Base64 to Uint8Array 
+      function base64ToUint8Array(base64) {
+         const binaryString = atob(base64);
+         const bytes = new Uint8Array(binaryString.length);
+         for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+         }
+         return bytes;
+      }
+      paths.forEach(path => {
+         try {
+            const result = phpDownload(path);
+            let zipFolderPath = "";
+            if (result.success) {
+               const binaryContent = base64ToUint8Array(result.content);
+               const zipPath = zipFolderPath ? `${zipFolderPath}/${result.fileName}` : result.fileName;
+               zip.file(zipPath, binaryContent);
+               return { success: true, fileName: result.fileName };
+            } else {
+               console.error(`Error[Download]: ${path}`, result.message);
+               return { success: false, fileName: path, error: result.message };
+            }
+         } catch (error) {
+            console.error(`Error[Process]: ${path}`, error);
+            return { success: false, fileName: path, error: error.message };
+         }
+      });
+   } catch (error) {
+      console.warn('Failed to list img folder contents:', error);
+   }
+            
+   // downlaod zip 
+   const content = await zip.generateAsync({ type: 'blob' });
+   const url = URL.createObjectURL(content);
+   const link = document.createElement('a');
+   link.href = url;
+   link.download = zipName;
+   document.body.appendChild(link);
+   link.click();
+   document.body.removeChild(link);
+   URL.revokeObjectURL(url);
 }
 
 // ------------------ inicializacion -------------------
