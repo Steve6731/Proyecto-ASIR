@@ -16,6 +16,7 @@
    <link rel="stylesheet" href="codeMirror/lib/codemirror.css">
    <link rel="stylesheet" href="codeMirror/theme/monokai.css">
    <link rel="stylesheet" href="css/main.css">
+   <link rel="stylesheet" href="css/interfaces.css">
 
 </head>
 <body>
@@ -122,7 +123,6 @@
          </nav>
       </div>
       <!-- -->
-      <!-- -->
    </div>
 
    <div id="bottomToolbar" class="bottom-toolbar">
@@ -139,6 +139,21 @@
       <button class="toolbar-btn" >🔔</button>
       <button class="toolbar-btn" >👤</button>
    </div>
+
+   <!-- Secondary interface -->
+   <div class="modal-overlay" id="interfaceOverlay"></div>
+
+   <div id="imageContainer">
+      <h3>🖼️ Imagenes </h3>
+      <div id="imageGridContainer">
+         <!-- almacena los imagenes en aqui -->
+      </div>
+      <div class="footer">
+         <button class="modal-btn btn-cancel" id="cancelBtn" onClick="hiddenImageContainer()">Cancel</button>
+         <button class="modal-btn btn-add" id="addImageBtn" onClick="addNewImage()">+ Add new</button>
+         <!--<button class="modal-btn btn-confirm" id="confirmBtn">Submit</button>-->
+      </div>
+</div>
 
    <script src="./js/main.js"></script>
    <script src="./js/sidebar.js"></script>

@@ -10,6 +10,7 @@ var currentSelectElement;
 var draggedElement; let dragging;
 var draggedDOMTreeElement; var currentHoverElement;
 let fileInput = document.getElementById("fileInput");
+const $interfaceOverlay = $("#interfaceOverlay");
 
 //-----------------------Current Selected Element----------------------
 
@@ -210,9 +211,8 @@ function addElement(tagName,text){
    if (tagName == "img"){
       newElement.src = "./img/1.png";
       newElement.addEventListener('dblclick', function(e) {
-            fileInput.currentTarget = e.currentTarget;
-            fileInput.click();
             setFocus();
+            showImageContainer();
       });
    }
    
