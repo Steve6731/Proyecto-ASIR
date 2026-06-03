@@ -211,7 +211,6 @@ function addElement(tagName,text){
    if (tagName == "img"){
       newElement.src = "./img/1.png";
       newElement.addEventListener('dblclick', function(e) {
-            setFocus();
             showImageContainer();
       });
    }
