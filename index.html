@@ -64,6 +64,7 @@
    </script>
 
 
+      <!------------------ sidebar Left ------------------>
    <div class="sidebar Left" id="sidebarLeft">
       <button class="menu-toggle Left" id="toggleSidebarBtnLeft"> ☰ </button>
       <!-- -->
@@ -98,7 +99,7 @@
       </div>
       <!-- -->
    </div>
-
+      <!----------------- sidebar Right ------------------>
    <div class="sidebar Right hidden" id="sidebarRight">
       <button class="menu-toggle Right" id="toggleSidebarBtnRight"> ☰ </button>
       <!-- -->
@@ -108,11 +109,12 @@
       </div>
       <!-- -->
       <div id="elementConfig" class="tab Right ">
-         <nav class="nav-menu">
-            <div>(Pendiente)</div>
-            <div>(Pendiente)</div>
-            <div>(Pendiente)</div>
-         </nav>
+         <Frome id="StyleForm">
+            <label for="StyleFormBackgroundColor">Background-color:</label>
+            <input type="color" id="StyleFormBackgroundColor" name="backgroundColor">
+            <label for="StyleFormColor">Color:</label>
+            <input type="color" id="StyleFormColor" name="color">
+         </Frome>
       </div>
       <!-- -->
       <div id="webConfig" class="tab Right hidden">

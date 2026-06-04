@@ -7,7 +7,6 @@ let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 DOMTreeMainUl.refElement=iframeDoc;
 var currentSelectElement;
-var draggedElement; let dragging;
 var draggedDOMTreeElement; var currentHoverElement;
 let fileInput = document.getElementById("fileInput");
 const $interfaceOverlay = $("#interfaceOverlay");
@@ -46,9 +45,11 @@ function setFocus(element,showOverlay = true){
 
    if (element === null || element === undefined){
       currentSelectElement = null;
+      HiddenStyleForm();
       return 0;
    }
    currentSelectElement = element;
+   ShowStyleForm();
    let elementRect = element.getBoundingClientRect();
    currentSelectElement.style.transform = 'translate(0, 0)';
 
@@ -184,6 +185,10 @@ function getElementIndex(element){
 
 
 //-----------------------Element Manager--------------------------
+
+var draggedElement;
+let dragging;
+
 function addElement(tagName,text){
    let newElement = iframeDoc.createElement(tagName);
    newElement.class = "element"; 
@@ -226,6 +231,7 @@ function addElement(tagName,text){
    newElement.addEventListener('drop', (e) => {
       if (!dragging) return null;
       e.currentTarget.appendChild(draggedElement);
+      setFocus(draggedElement)
       createNewSortable(e.currentTarget);
       createNewSortable(draggedElement);
       draggedElement = null;

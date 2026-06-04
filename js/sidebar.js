@@ -44,16 +44,31 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    //if (currentDepth >= maxDepth) return null;
    //if (element.nodeType !== 1) return null;
    //get
+   let newLi = document.createElement('li');
+   let newDiv = document.createElement('div');
+   let PositionSign = "?";
+   if (element == iframeDoc.body){
+      PositionSign = "root";
+   }else{
+      let position = window.getComputedStyle(element).position;
+      switch (position){
+         case "static":   PositionSign = "STA";break;
+         case "relative": PositionSign = "REL";break;
+         case "absolute": PositionSign = "ABS";break;
+         case "fixed":    PositionSign = "FIX";break;
+         case "sticky":   PositionSign = "STI";break;
+      }
+   }
+
    let output = element.tagName;
    if (element.id) output += '#' + element.id;
    if (element.className) output += '.' + element.className.trim().split(/\s+/).join('.');
-   let newLi = document.createElement('li');
-   let newDiv = document.createElement('div');
+
    newLi.RefElement = element;
    newDiv.innerHTML = `
       <span class="sortable-handle">⋮⋮</span>
       <span class="nodeTag" style="color:gray;padding:0px 2px;">
-         ${element.tagName}
+         ${PositionSign}
       </span>
          ${output}`;
    newLi.appendChild(newDiv);
@@ -127,6 +142,31 @@ function newLiAddEventListener(newLi){
       currentHoverElement = e.currentTarget
    });
 }
+
+//------------------ inicializacion -------------------
+const $StyleForm = $("#StyleForm");
+
+function HiddenStyleForm(){
+   $StyleForm.hide();
+}
+
+function ShowStyleForm(){
+   $StyleForm.show();
+}
+
+$StyleForm.on('input change', function(e) {
+   let inputName = e.target.name;
+   let inputValue = $(e.target).val();
+   if (currentSelectElement){
+      switch (inputName){
+         case "backgroundColor": currentSelectElement.style.backgroundColor = inputValue;
+            break;
+         case "color": currentSelectElement.style.color = inputValue;
+            break;
+      }
+   }
+});
+
 //------------------ inicializacion -------------------
 
 $(iframe).ready(function(){
