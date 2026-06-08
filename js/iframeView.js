@@ -1,6 +1,7 @@
 let currentTop = 0; let currentLeft = 0;
 let iframeView = document.getElementById("iframeView");
 let moveIframe = false;
+let iframeViewDragging = false;
 
 function moveIframeToggle(element){
    moveIframe = !moveIframe;
@@ -29,22 +30,22 @@ function setIframeScale(Scale){
 
 iframeView.addEventListener('pointerdown', function (e) {
    //Si haces clic con el boton izquierdo del raton
-   if (e.button === 0 ) {
+   if (e.button === 0 && moveIframe) {
       console.log("do pointer down")
-         dragging = true;
-         let matrix = iframe.style.translate.split(' ');;
-         currentTop = parseFloat(matrix[1]) || 0;
-         currentLeft = parseFloat(matrix[0]) || 0;
-         iframeView.mouseLastY = e.clientY;
-         iframeView.mouseLastX = e.clientX;
-         iframeView.mouseStartY = currentTop;
-         iframeView.mouseStartX = currentLeft;
-         e.stopPropagation();
+      iframeViewDragging = true;
+      let matrix = iframe.style.translate.split(' ');;
+      currentTop = parseFloat(matrix[1]) || 0;
+      currentLeft = parseFloat(matrix[0]) || 0;
+      iframeView.mouseLastY = e.clientY;
+      iframeView.mouseLastX = e.clientX;
+      iframeView.mouseStartY = currentTop;
+      iframeView.mouseStartX = currentLeft;
+      e.stopPropagation();
    }
 });
 
 document.addEventListener('pointermove', function (e) {
-   if (dragging) {
+   if (iframeViewDragging && moveIframe) {
       // calcula cuanto moueve el raton y obtener nuevo posicion del scroll
       let mouseMoveLengthY = e.clientY - iframeView.mouseLastY;
       let mouseMoveLengthX = e.clientX - iframeView.mouseLastX;
@@ -58,8 +59,8 @@ document.addEventListener('pointermove', function (e) {
 });
 
 document.addEventListener('pointerup', function (e) {
-   if (dragging) {
+   if (iframeViewDragging) {
       e.stopPropagation();
-      dragging = false;
+      iframeViewDragging = false;
    }
 });

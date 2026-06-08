@@ -2,7 +2,7 @@ let dragSourceNode = null;
 let IframeScale = 0.5;
 const iframe = document.getElementById('myIframe');
 let $iframe = $(iframe);
-const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+let iframeDoc = iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 DOMTreeMainUl.refElement=iframeDoc;
@@ -120,10 +120,30 @@ function setFocus(element,showOverlay = true){
    })
 
    dragHandleIcon.addEventListener('dragstart', (e) => {
-      draggedElement = e.currentTarget.refElement;
-      dragging = true;
       e.stopImmediatePropagation();
       e.stopPropagation();
+      draggedElement = e.currentTarget.refElement;
+      dragging = true;
+   });
+
+   dragHandleIcon.addEventListener('dragend', (e) => {
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if (!dragging) return;
+      let elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY);
+      elementsUnderCursor.forEach(element => {
+         if (element == iframeView) {
+            try {
+               iframeDoc.body.appendChild(draggedElement);
+               setFocus(draggedElement);
+               draggedElement = null;
+               dragging = false;
+               return;
+            } catch (error) {
+               console.error('Error: ', error);
+            }
+         }
+      });
    });
 
 }
@@ -191,7 +211,6 @@ let dragging;
 
 function addElement(tagName,text){
    let newElement = iframeDoc.createElement(tagName);
-   newElement.class = "element"; 
    if (text){
       newElement.innerHTML = text;
    }
@@ -202,7 +221,8 @@ function addElement(tagName,text){
       "margin":"5px",
       "padding":"5px"
    });
-
+   console.log(currentSelectElement);
+   console.log(newElement);
    if (currentSelectElement){
       currentSelectElement.appendChild(newElement);
       setFocus(currentSelectElement);
@@ -333,9 +353,3 @@ async function exportIframeContent(iframeElement, zipName = 'Web.zip') {
    document.body.removeChild(link);
    URL.revokeObjectURL(url);
 }
-
-// ------------------ inicializacion -------------------
-$(document).ready(function(){
-      iframeDoc.body.style.padding = "20px 0";
-      createNewSortable(iframeDoc.body);
-});

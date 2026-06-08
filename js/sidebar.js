@@ -105,6 +105,7 @@ function newLiAddEventListener(newLi){
          createNewUlSortable(draggedDOMTreeElement.RefUl);
       createNewSortable(e.currentTarget.RefElement);
       createNewSortable(draggedDOMTreeElement.RefElement);
+      setFocus(draggedDOMTreeElement.RefElement);
       draggedDOMTreeElement = null;
       currentHoverElement = null;
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
@@ -165,11 +166,4 @@ $StyleForm.on('input change', function(e) {
             break;
       }
    }
-});
-
-//------------------ inicializacion -------------------
-
-$(iframe).ready(function(){
-      buildDOMTree(iframeDoc.body,DOMTreeMainUl);
-      createNewUlSortable(DOMTreeMainUl);
 });
