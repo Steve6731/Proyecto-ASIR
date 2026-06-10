@@ -1,9 +1,11 @@
 
 // ------------------ inicializacion -------------------
 $( iframeDoc ).ready( function() {
-   console.log(iframeDoc.body)
    createNewSortable(iframeDoc.body);
    buildDOMTree(iframeDoc.body,DOMTreeMainUl);
+   iframeDoc.addEventListener("click",() => {
+      setFocus();
+   });
 })
 
 createNewUlSortable(DOMTreeMainUl);

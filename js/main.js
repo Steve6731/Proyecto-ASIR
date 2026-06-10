@@ -13,13 +13,6 @@ const $interfaceOverlay = $("#interfaceOverlay");
 
 //-----------------------Current Selected Element----------------------
 
-function setAllElementFocusable(){
-   let focusableElements = iframeDoc.body.querySelectorAll('*');
-   focusableElements.forEach(elem => {
-      setFocusable(elem);
-   });
-   
-}
 function setFocusable(element){
    element.addEventListener('click', (e) => {
       setFocus(element);
@@ -137,6 +130,7 @@ function setFocus(element,showOverlay = true){
             try {
                iframeDoc.body.appendChild(draggedElement);
                setFocus(draggedElement);
+               buildDOMTree(iframeDoc.body,DOMTreeMainUl);
                draggedElement = null;
                draggingElement = false;
                return;

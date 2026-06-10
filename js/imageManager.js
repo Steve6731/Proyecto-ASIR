@@ -46,8 +46,10 @@ function addImageCard(path){
    imageGridContainer.appendChild(newCard);
    newImg.addEventListener('dblclick', function(e) {
       currentSelectElement.src = newImg.src;
-      hiddenImageContainer()
-      setFocus(currentSelectElement)
+      hiddenImageContainer();
+      $(newImg).ready(function (){
+         setFocus(currentSelectElement);
+      })
    });
 }
 
