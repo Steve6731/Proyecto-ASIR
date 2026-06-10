@@ -25,14 +25,12 @@ function sidebarChangeTabLeft(elementId){
    currentTabLeft.classList.add('hidden');
    currentTabLeft = document.getElementById(elementId);
    currentTabLeft.classList.remove('hidden');
-   console.log("do tab change");
 }
 
 function sidebarChangeTabRight(elementId){
    currentTabRight.classList.add('hidden');
    currentTabRight = document.getElementById(elementId);
    currentTabRight.classList.remove('hidden');
-   console.log("do tab change");
 }
 
 //------------------------DOMTree---------------------------------------
@@ -65,6 +63,7 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    if (element.className) output += '.' + element.className.trim().split(/\s+/).join('.');
 
    newLi.RefElement = element;
+   newDiv.RefElement = element;
    newDiv.innerHTML = `
       <span class="sortable-handle">⋮⋮</span>
       <span class="nodeTag" style="color:gray;padding:0px 2px;">
@@ -75,6 +74,11 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    elementRefUL.appendChild(newLi);
    newLi.draggable = true;
 
+   newDiv.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setFocus(e.target.RefElement)
+   });
 
    newLiAddEventListener(newLi);
    
@@ -127,7 +131,6 @@ function newLiAddEventListener(newLi){
       if (realTarget && realTarget.closest('.sortable-handle')) return null;
       e.stopImmediatePropagation();
       e.stopPropagation();
-      console.log(e.currentTarget);
       draggedDOMTreeElement = e.currentTarget;
       dragging = true;
    });

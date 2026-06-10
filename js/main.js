@@ -1,8 +1,8 @@
 let dragSourceNode = null;
 let IframeScale = 0.5;
 const iframe = document.getElementById('myIframe');
+let iframeDoc = document.getElementById('myIframe').contentWindow.document;
 let $iframe = $(iframe);
-let iframeDoc = iframe.contentWindow.document;
 let iframeBody = $("#myIframe body");
 let DOMTreeMainUl=document.getElementById("bodyDOMTreeList");
 DOMTreeMainUl.refElement=iframeDoc;
@@ -51,6 +51,7 @@ function setFocus(element,showOverlay = true){
    currentSelectElement = element;
    ShowStyleForm();
    let elementRect = element.getBoundingClientRect();
+   let elementStyle = window.getComputedStyle(element);
    currentSelectElement.style.transform = 'translate(0, 0)';
 
    function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
@@ -67,10 +68,10 @@ function setFocus(element,showOverlay = true){
    let border = "1px solid blue"
    OverLayerPadding = document.createElement('div');
    element.Overlay = OverLayerPadding;
-   let paddingHight = currentSelectElement.offsetHeight;
-   let paddingWidth = currentSelectElement.offsetWidth;
-   let paddingY = elementRect.top  + iframe.contentWindow.scrollY;
-   let paddingX = elementRect.left + iframe.contentWindow.scrollX;
+   let paddingHight = currentSelectElement.offsetHeight|| 0;
+   let paddingWidth = currentSelectElement.offsetWidth|| 0;
+   let paddingY = elementRect.top  + iframe.contentWindow.scrollY|| 0;
+   let paddingX = elementRect.left + iframe.contentWindow.scrollX|| 0;
    
    addOverLayer(iframeDoc.body,OverLayerPadding,paddingHight,paddingWidth,paddingY,paddingX,border);
    
@@ -80,21 +81,21 @@ function setFocus(element,showOverlay = true){
       $(OverLayerPadding).hide();
    }
    OverLayerMargin = document.createElement('div');
-   let marginTop = parseFloat(element.style.marginTop);
-   let marginLeft = parseFloat(element.style.marginLeft);
-   let marginBottom = parseFloat(element.style.marginBottom);
-   let marginRight = parseFloat(element.style.marginRight);
-   let marginHight = paddingHight + marginTop + marginBottom;
-   let marginWidth = paddingWidth + marginLeft + marginRight;
+   let marginTop = parseFloat(elementStyle.marginTop) || 0;
+   let marginLeft = parseFloat(elementStyle.marginLeft)|| 0;
+   let marginBottom = parseFloat(elementStyle.marginBottom)|| 0;
+   let marginRight = parseFloat(elementStyle.marginRight)|| 0;
+   let marginHight = paddingHight + marginTop + marginBottom|| 0;
+   let marginWidth = paddingWidth + marginLeft + marginRight|| 0;
    addOverLayer(OverLayerPadding,OverLayerMargin,marginHight,marginWidth,-marginTop,-marginLeft,border);
 
    OverLayerContent = document.createElement('div');
-   let paddingTop = parseFloat(element.style.paddingTop);
-   let paddingLeft = parseFloat(element.style.paddingLeft);
-   let paddingBottom = parseFloat(element.style.paddingBottom);
-   let paddingRight = parseFloat(element.style.paddingRight);
-   let contentHight = paddingHight - paddingTop - paddingBottom;
-   let contentWidth = paddingWidth - paddingLeft - paddingRight;
+   let paddingTop = parseFloat(elementStyle.paddingTop)|| 0;
+   let paddingLeft = parseFloat(elementStyle.paddingLeft)|| 0;
+   let paddingBottom = parseFloat(elementStyle.paddingBottom)|| 0;
+   let paddingRight = parseFloat(elementStyle.paddingRight)|| 0;
+   let contentHight = paddingHight - paddingTop - paddingBottom|| 0;
+   let contentWidth = paddingWidth - paddingLeft - paddingRight|| 0;
    addOverLayer(OverLayerPadding,OverLayerContent,contentHight,contentWidth,paddingTop,paddingLeft,border);
 
    dragHandleIcon = document.createElement('div');
@@ -123,13 +124,13 @@ function setFocus(element,showOverlay = true){
       e.stopImmediatePropagation();
       e.stopPropagation();
       draggedElement = e.currentTarget.refElement;
-      dragging = true;
+      draggingElement = true;
    });
 
    dragHandleIcon.addEventListener('dragend', (e) => {
       e.stopImmediatePropagation();
       e.stopPropagation();
-      if (!dragging) return;
+      if (!draggingElement) return;
       let elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY);
       elementsUnderCursor.forEach(element => {
          if (element == iframeView) {
@@ -137,7 +138,7 @@ function setFocus(element,showOverlay = true){
                iframeDoc.body.appendChild(draggedElement);
                setFocus(draggedElement);
                draggedElement = null;
-               dragging = false;
+               draggingElement = false;
                return;
             } catch (error) {
                console.error('Error: ', error);
@@ -197,6 +198,7 @@ function sortRefElement(event) {
     }
     dragElement.draggable=true;
     //newLiAddEventListener(dragElement);
+    setFocus(dragNode);
 }
 
 function getElementIndex(element){
@@ -207,22 +209,14 @@ function getElementIndex(element){
 //-----------------------Element Manager--------------------------
 
 var draggedElement;
-let dragging;
+let draggingElement;
 
 function addElement(tagName,text){
    let newElement = iframeDoc.createElement(tagName);
    if (text){
       newElement.innerHTML = text;
    }
-   $newElement = $(newElement);
-   $newElement.css({
-      "min-width":"10px",
-      "min-hight":"10px",
-      "margin":"5px",
-      "padding":"5px"
-   });
-   console.log(currentSelectElement);
-   console.log(newElement);
+
    if (currentSelectElement){
       currentSelectElement.appendChild(newElement);
       setFocus(currentSelectElement);
@@ -242,20 +236,20 @@ function addElement(tagName,text){
    
 
    newElement.addEventListener('dragover', (e) => {
-      if (!dragging) return null;
+      if (!draggingElement) return null;
       e.dataTransfer.dropEffect = 'move';
       e.preventDefault();
       e.stopPropagation();
    });
 
    newElement.addEventListener('drop', (e) => {
-      if (!dragging) return null;
+      if (!draggingElement) return null;
       e.currentTarget.appendChild(draggedElement);
       setFocus(draggedElement)
       createNewSortable(e.currentTarget);
       createNewSortable(draggedElement);
       draggedElement = null;
-      dragging = false;
+      draggingElement = false;
       e.preventDefault();
       e.stopPropagation();
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
@@ -270,6 +264,7 @@ function removeCurrentSelectElement(){
       currentSelectElement.remove();
       buildDOMTree(iframeDoc.body,DOMTreeMainUl);
       menu.style.display = 'none';
+      setFocus();
    }
 }
 

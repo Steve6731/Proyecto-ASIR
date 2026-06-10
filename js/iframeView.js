@@ -19,7 +19,6 @@ document.getElementById('IframeScaleController').addEventListener('change', func
 });
 
 function setIframeScale(Scale){
-   console.log("do setIframeScale")
    IframeScale = Scale;
    $iframe.css({
       "transform": `scale(${Scale})`,
