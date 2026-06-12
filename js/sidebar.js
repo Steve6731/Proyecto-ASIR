@@ -106,9 +106,6 @@ function newLiAddEventListener(newLi){
       e.currentTarget.RefElement.appendChild(draggedDOMTreeElement.RefElement);
       
       e.currentTarget.classList.remove('hover');
-      createNewUlSortable(e.currentTarget.RefUl);
-      if(draggedDOMTreeElement.RefUl  == null && draggedDOMTreeElement.RefUl == undefined)
-         createNewUlSortable(draggedDOMTreeElement.RefUl);
       createNewSortable(e.currentTarget.RefElement);
       createNewSortable(draggedDOMTreeElement.RefElement);
       setFocus(draggedDOMTreeElement.RefElement);
@@ -138,7 +135,7 @@ function newLiAddEventListener(newLi){
    });
 
    newLi.addEventListener('dragover', (e) => {
-      if (!dragging) return null;
+      if (!draggedDOMTreeElement) return null;
       e.preventDefault();
       e.stopPropagation();
       e.dataTransfer.dropEffect = 'move';

@@ -2,7 +2,6 @@ let currentTop = 0; let currentLeft = 0;
 let iframeView = document.getElementById("iframeView");
 let moveIframe = false;
 let iframeViewDragging = false;
-
 function moveIframeToggle(element){
    moveIframe = !moveIframe;
    if (moveIframe){
@@ -15,7 +14,8 @@ function moveIframeToggle(element){
 }
 
 document.getElementById('IframeScaleController').addEventListener('change', function(e) {
-   setIframeScale(e.target.value)
+   IframeScale = e.target.value;
+   setIframeScale(IframeScale)
 });
 
 function setIframeScale(Scale){

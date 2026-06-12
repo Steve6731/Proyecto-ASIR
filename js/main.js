@@ -43,8 +43,10 @@ function setFocus(element,showOverlay = true){
    if(currentSelectElement){
       currentSelectElement.style.transform = '';
       if (currentSelectElement.Overlay){
-         iframeDoc.body.removeChild(currentSelectElement.Overlay);
-         iframeView.removeChild(currentSelectElement.dragHandleIcon);
+         //iframeView.removeChild(currentSelectElement.Overlay);
+         //iframeView.removeChild(currentSelectElement.dragHandleIcon);
+         currentSelectElement.Overlay.remove();
+         currentSelectElement.dragHandleIcon.remove();
          delete currentSelectElement.dragHandleIcon;
          delete currentSelectElement.Overlay;
       }
@@ -79,8 +81,8 @@ function setFocus(element,showOverlay = true){
    let paddingWidth = currentSelectElement.offsetWidth|| 0;
    let paddingY = elementRect.top  + iframe.contentWindow.scrollY|| 0;
    let paddingX = elementRect.left + iframe.contentWindow.scrollX|| 0;
-   
-   addOverLayer(iframeDoc.body,OverLayerPadding,paddingHight,paddingWidth,paddingY,paddingX,border);
+   OverLayerPadding.style.transform = `scale(${IframeScale})`;
+   addOverLayer(iframeView,OverLayerPadding,paddingHight,paddingWidth,paddingY,paddingX,border);
    
    if (showOverlay){
       $(OverLayerPadding).show();
@@ -198,6 +200,7 @@ function sortRefElement(event) {
     let dragNode = dragElement.RefElement || dragElement;
     let targetParent = targetUl.RefElement || targetUl;
     let childCount = targetParent.childElementCount;
+    console.log(targetParent);
     if (newIndex >= childCount - 1) {
         targetParent.appendChild(dragNode);
     } else {
