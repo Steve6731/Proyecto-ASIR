@@ -61,12 +61,14 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
    let output = element.tagName;
    if (element.id) output += '#' + element.id;
    if (element.className) output += '.' + element.className.trim().split(/\s+/).join('.');
-
+   if (hasTextNode(element)) {
+      output += `<span class="nodeContent"> ${getFirstNonEmptyTextNode(element).nodeValue} </span>`;
+   }
    newLi.RefElement = element;
    newDiv.RefElement = element;
    newDiv.innerHTML = `
       <span class="sortable-handle">⋮⋮</span>
-      <span class="nodeTag" style="color:gray;padding:0px 2px;">
+      <span class="nodeTag">
          ${PositionSign}
       </span>
          ${output}`;

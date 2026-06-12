@@ -74,10 +74,12 @@ iframe{
 
 #sidebarLeft {
    left: 0;
+   overflow: hidden;
 }
 
 #sidebarRight {
    right: 0;
+   overflow: hidden;
 }
 
 .sidebar {
@@ -203,7 +205,21 @@ iframe{
    transition: background 0.1s;
    user-select: none;
    margin: 0 0 0 10px;
+   white-space: nowrap;
 }
+
+#tabDOMTree .nodeTag{
+  border-radius: 25%;
+  background-color: #3a5a74;
+  color:white;
+  padding:0px 0px 0px 4px;
+  margin:0px 4px 0px 0px;
+}
+
+#tabDOMTree .nodeContent{
+   opacity: 0.5;
+   pointer-events: none;
+ }
 
 #tabDOMTree div {
    align-items: center;

@@ -11,6 +11,20 @@ var draggedDOMTreeElement; var currentHoverElement;
 let fileInput = document.getElementById("fileInput");
 const $interfaceOverlay = $("#interfaceOverlay");
 
+//------------------------------ Function -----------------------------
+function hasTextNode(element) {
+   return Array.from(element.childNodes).some(node => 
+       node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== ''
+   );
+}
+function getFirstNonEmptyTextNode(element) {
+   for (let node of element.childNodes) {
+       if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== '') {
+           return node;
+       }
+   }
+   return null;
+}
 //-----------------------Current Selected Element----------------------
 
 function setFocusable(element){
