@@ -21,6 +21,7 @@
 </head>
 <body>
    <input id="fileInput" type="file" style="display: none;"/>
+   <!------------------ Content menu ------------------>
    <div id="leftClickMenu" class="custom-menu">
       <ul>
          <li onclick="removeCurrentSelectElement()">Delete</li>
@@ -30,7 +31,7 @@
          <li onclick="exportIframeContent(iframe)">Exportar</li>
       </ul>
    </div>
-
+   <!------------------ iframe ------------------>
    <div id="iframeView">
       <iframe id="myIframe" src="about:blank"
       srcdoc="
@@ -44,6 +45,7 @@
       </iframe>
    </div>
 
+   <!------------------ code mirror ------------------>
    <div id="editArea">
    <textarea id="myEditor" sytle=" position:fixed; top:100vh;">
    // Esto es solo un ejemplo para probar cómo funciona CodeMirror, 
@@ -97,21 +99,25 @@
       <!----------------- sidebar Right ------------------>
    <div class="sidebar Right hidden" id="sidebarRight">
       <button class="menu-toggle Right" id="toggleSidebarBtnRight"> ☰ </button>
-      <!-- -->
+      <!-- tabs -->
       <div class="tabs Right">
          <div><button onclick="sidebarChangeTabRight('elementConfig')">Style</button></div>
          <div><button onclick="sidebarChangeTabRight('webConfig')">Header</button></div>
       </div>
-      <!-- -->
+      <!---------- Style Form----------->
       <div id="elementConfig" class="tab Right ">
          <Frome id="StyleForm">
             <label for="StyleFormBackgroundColor">Background-color:</label>
             <input type="color" id="StyleFormBackgroundColor" name="backgroundColor">
             <label for="StyleFormColor">Color:</label>
             <input type="color" id="StyleFormColor" name="color">
+            <br><label for="StyleFormMargin">Margin:</label>
+            <input type="text" id="StyleFormMargin" name="margin">
+            <br><label for="StyleFormPadding">Padding:</label>
+            <input type="text" id="StyleFormPadding" name="padding">
          </Frome>
       </div>
-      <!-- -->
+      <!-- webconfig -->
       <div id="webConfig" class="tab Right hidden">
          <nav class="nav-menu">
             <div>(vacio)</div>
@@ -121,8 +127,9 @@
       </div>
       <!-- -->
    </div>
-
+   <!----------------- bottomToolbar ------------------>
    <div id="bottomToolbar" class="bottom-toolbar">
+      <label class="toolbar-btn" for="IframeScaleController">🔍</label>
       <select id="IframeScaleController">
          <option value="0.25">25%</option>
          <option value="0.50" selected>50%</option>
@@ -132,7 +139,6 @@
          <option value="3.00">300%</option>
       </select>
       <button class="toolbar-btn" onclick="moveIframeToggle(this)">✋</button>
-      <button class="toolbar-btn" >🔍</button>
       <button class="toolbar-btn" >🔔</button>
       <button class="toolbar-btn" >👤</button>
    </div>

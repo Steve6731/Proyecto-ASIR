@@ -147,7 +147,7 @@ function newLiAddEventListener(newLi){
    });
 }
 
-//------------------ inicializacion -------------------
+//------------------ Style -------------------
 const $StyleForm = $("#StyleForm");
 
 function HiddenStyleForm(){
@@ -162,11 +162,17 @@ $StyleForm.on('input change', function(e) {
    let inputName = e.target.name;
    let inputValue = $(e.target).val();
    if (currentSelectElement){
+      console.log(`${inputName}: ${inputValue}`)
       switch (inputName){
          case "backgroundColor": currentSelectElement.style.backgroundColor = inputValue;
             break;
          case "color": currentSelectElement.style.color = inputValue;
             break;
+         case "margin": currentSelectElement.style.margin = inputValue;
+            break;
+         case "padding": currentSelectElement.style.padding = inputValue;
+            break;
       }
+      setFocus(currentSelectElement);
    }
 });

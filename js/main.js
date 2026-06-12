@@ -46,7 +46,7 @@ function setFocus(element,showOverlay = true){
    let elementRect = element.getBoundingClientRect();
    let elementStyle = window.getComputedStyle(element);
    currentSelectElement.style.transform = 'translate(0, 0)';
-
+   
    function addOverLayer(parentElement,Overlay,hight,width,top,left,border){
       Overlay.style.position = "absolute";
       Overlay.style.border = border;
