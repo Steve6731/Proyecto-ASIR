@@ -99,7 +99,7 @@ function buildDOMTree(element,elementRefUL, maxDepth = Infinity, currentDepth = 
 
 function newLiAddEventListener(newLi){
    newLi.addEventListener('drop', (e) => {
-      if (!dragging) return null;
+      if (!draggedDOMTreeElement) return null;
       e.preventDefault();
       e.stopPropagation();
       e.currentTarget.RefUl.appendChild(draggedDOMTreeElement);

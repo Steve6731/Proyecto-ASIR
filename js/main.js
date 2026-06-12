@@ -81,8 +81,8 @@ function setFocus(element,showOverlay = true){
    let paddingWidth = currentSelectElement.offsetWidth|| 0;
    let paddingY = elementRect.top  + iframe.contentWindow.scrollY|| 0;
    let paddingX = elementRect.left + iframe.contentWindow.scrollX|| 0;
-   OverLayerPadding.style.transform = `scale(${IframeScale})`;
-   addOverLayer(iframeView,OverLayerPadding,paddingHight,paddingWidth,paddingY,paddingX,border);
+   //OverLayerPadding.style.transform = `scale(${IframeScale})`;
+   addOverLayer(iframeDoc.body,OverLayerPadding,paddingHight,paddingWidth,paddingY,paddingX,border);
    
    if (showOverlay){
       $(OverLayerPadding).show();
@@ -200,7 +200,17 @@ function sortRefElement(event) {
     let dragNode = dragElement.RefElement || dragElement;
     let targetParent = targetUl.RefElement || targetUl;
     let childCount = targetParent.childElementCount;
-    console.log(targetParent);
+    console.log(targetParent)
+    console.log(currentSelectElement)
+    
+    if (targetParent == iframeDoc.body && currentSelectElement){
+      if ( currentSelectElement.Overlay ){
+         childCount--;
+         console.log(currentSelectElement.Overlay)
+      }
+    }
+    
+    console.log(`${newIndex} >= ${childCount - 1}`)
     if (newIndex >= childCount - 1) {
         targetParent.appendChild(dragNode);
     } else {
