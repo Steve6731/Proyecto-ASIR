@@ -336,24 +336,22 @@ async function exportIframeContent(iframeElement, zipName = 'Web.zip') {
          }
          return bytes;
       }
-      paths.forEach(path => {
+      for (const path of paths) {
          try {
-            const result = phpDownload(path);
-            let zipFolderPath = "";
+            const result = await phpDownload(path);
+            let zipFolderPath = "./img/";
+            console.log(result);
             if (result.success) {
-               const binaryContent = base64ToUint8Array(result.content);
-               const zipPath = zipFolderPath ? `${zipFolderPath}/${result.fileName}` : result.fileName;
-               zip.file(zipPath, binaryContent);
-               return { success: true, fileName: result.fileName };
+                  const binaryContent = base64ToUint8Array(result.content);
+                  const zipPath = zipFolderPath ? `${zipFolderPath}/${result.fileName}` : result.fileName;
+                  zip.file(zipPath, binaryContent);
             } else {
-               console.error(`Error[Download]: ${path}`, result.message);
-               return { success: false, fileName: path, error: result.message };
+                  console.error(`Error[Download]: ${path}`, result.message);
             }
          } catch (error) {
             console.error(`Error[Process]: ${path}`, error);
-            return { success: false, fileName: path, error: error.message };
          }
-      });
+      }
    } catch (error) {
       console.warn('Failed to list img folder contents:', error);
    }

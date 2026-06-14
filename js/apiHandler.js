@@ -13,7 +13,9 @@ function phpDownload(Path){
             return {
                success: true,
                fileName: getFileNameFromPath(Path),
-               content: data.content
+               filePath: Path,
+               content: data.content,
+               message: data.message
             };
       } else {
             return {
