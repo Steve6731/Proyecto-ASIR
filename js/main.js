@@ -277,7 +277,11 @@ function addElement(tagName,text){
    });
 
    buildDOMTree(iframeDoc.body,DOMTreeMainUl);
-   
+   if (currentSelectElement){
+      $(currentSelectElement).ready(function (){
+         setFocus(currentSelectElement);
+      })
+   }
 }
 
 function removeCurrentSelectElement(){
